@@ -2,6 +2,7 @@ package com.mrbysco.camocreepers.client.renderer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mrbysco.camocreepers.config.CamoConfig;
 import com.mrbysco.camocreepers.entity.CamoCreeperEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -38,27 +39,28 @@ public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T
 			final World world = camoCreeper.getCommandSenderWorld();
 			final BlockPos pos = camoCreeper.blockPosition();
 			final Biome biome = world.getBiome(pos);
+			int baseColor = BiomeColors.getAverageGrassColor(world, pos);
 			int color;
 			if(world != null && pos != null) {
-				if(biome.getBiomeCategory() == Category.NETHER) {
+				if(CamoConfig.COMMON.netherCamo.get() && biome.getBiomeCategory() == Category.NETHER) {
 					if(biome.getRegistryName().equals(Biomes.BASALT_DELTAS.location())) {
 						color = 6052956;
 					} else {
 						color = 8733250;
 					}
-				} else if(world.getBiome(pos).getBiomeCategory() == Category.THEEND) {
+				} else if(CamoConfig.COMMON.endCamo.get() && world.getBiome(pos).getBiomeCategory() == Category.THEEND) {
 					color = 15660724;
 				} else if(world.getBiome(pos).getBiomeCategory() == Category.MUSHROOM) {
 					color = 9138547;
-				} else if(world.getBlockState(pos.above()).getBlock() == Blocks.CAVE_AIR) {
+				} else if(CamoConfig.COMMON.caveCamo.get() && world.getBlockState(pos.above()).getBlock() == Blocks.CAVE_AIR) {
 					color = 7631988;
 				} else if(biome.getBiomeCategory() == Category.DESERT || biome.getBiomeCategory() == Category.BEACH) {
 					color = 14009494;
 				} else {
-					color = BiomeColors.getAverageGrassColor(world, pos);
+					color = baseColor;
 				}
 			} else {
-				color = BiomeColors.getAverageGrassColor(world, pos);
+				color = baseColor;
 			}
 
 			final float r = (float)(color >> 16 & 255) / 255.0F;

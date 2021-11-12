@@ -15,6 +15,10 @@ public class CamoConfig {
 		public final IntValue camoCreeperMin;
 		public final IntValue camoCreeperMax;
 
+		public final BooleanValue netherCamo;
+		public final BooleanValue endCamo;
+		public final BooleanValue caveCamo;
+
 		Common(ForgeConfigSpec.Builder builder) {
 			builder.comment("General settings")
 					.push("General");
@@ -34,6 +38,22 @@ public class CamoConfig {
 			camoCreeperMax = builder
 					.comment("The max group size of the Camo Creeper [default: 4]")
 					.defineInRange("camoCreeperMax", 4, 1, Integer.MAX_VALUE);
+
+			builder.pop();
+			builder.comment("Camo settings")
+					.push("Camo");
+
+			netherCamo = builder
+					.comment("Allow Camo Creepers to camouflage in the Nether [default: true]")
+					.define("netherCamo", true);
+
+			endCamo = builder
+					.comment("Allow Camo Creepers to camouflage in the End [default: true]")
+					.define("endCamo", true);
+
+			caveCamo = builder
+					.comment("Allow Camo Creepers to camouflage in caves [default: true]")
+					.define("caveCamo", true);
 
 			builder.pop();
 		}
