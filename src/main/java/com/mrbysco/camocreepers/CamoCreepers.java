@@ -48,7 +48,7 @@ public class CamoCreepers {
             for(RegistryObject<Item> registryObject : CamoRegistry.ITEMS.getEntries()) {
                 if(registryObject.get() instanceof CustomSpawnEggItem) {
                     CustomSpawnEggItem spawnEgg = (CustomSpawnEggItem)registryObject.get();
-                    SpawnEggItem.EGGS.put(spawnEgg.entityType.get(), spawnEgg);
+                    SpawnEggItem.BY_ID.put(spawnEgg.entityType.get(), spawnEgg);
                 }
             }
         });

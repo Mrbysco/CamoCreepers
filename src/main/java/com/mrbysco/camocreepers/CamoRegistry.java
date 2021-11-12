@@ -24,29 +24,29 @@ public class CamoRegistry {
 	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, CamoCreepers.MOD_ID);
 
 	public static final RegistryObject<EntityType<CamoCreeperEntity>> CAMO_CREEPER = ENTITIES.register("camo_creeper", () ->
-			register("camo_creeper", EntityType.Builder.<CamoCreeperEntity>create(CamoCreeperEntity::new, EntityClassification.MONSTER)
-					.size(0.6F, 1.7F).trackingRange(8)));
+			register("camo_creeper", EntityType.Builder.<CamoCreeperEntity>of(CamoCreeperEntity::new, EntityClassification.MONSTER)
+					.sized(0.6F, 1.7F).clientTrackingRange(8)));
 
 	public static final RegistryObject<Item> CAMO_CREEPER_SPAWN_EGG = ITEMS.register("camo_creeper_spawn_egg" , () ->
 			new CustomSpawnEggItem(() -> CAMO_CREEPER.get(), 894731, 0, itemBuilder()));
 
 
 	public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
-		event.put(CAMO_CREEPER.get(), CamoCreeperEntity.registerAttributes().create());
+		event.put(CAMO_CREEPER.get(), CamoCreeperEntity.createAttributes().build());
 	}
 
 	public static void addSpawn(BiomeLoadingEvent event) {
 		Biome biome = ForgeRegistries.BIOMES.getValue(event.getName());
 		if(biome != null) {
-			MobSpawnInfo info = biome.getMobSpawnInfo();
+			MobSpawnInfo info = biome.getMobSettings();
 			List<Spawners> spawns = event.getSpawns().getSpawner(EntityClassification.MONSTER);
-			for(Spawners entry : info.getSpawners(EntityClassification.MONSTER)) {
+			for(Spawners entry : info.getMobs(EntityClassification.MONSTER)) {
 				if(entry.type == EntityType.CREEPER) {
 					spawns.add(new MobSpawnInfo.Spawners(CAMO_CREEPER.get(), Math.min(1, CamoConfig.COMMON.camoCreeperWeight.get()), CamoConfig.COMMON.camoCreeperMin.get(), CamoConfig.COMMON.camoCreeperMax.get()));
 				}
 			}
 			if(CamoConfig.COMMON.overrideCreeperSpawns.get()) {
-				info.getSpawners(EntityClassification.MONSTER).removeIf((entry -> entry.type == EntityType.CREEPER));
+				info.getMobs(EntityClassification.MONSTER).removeIf((entry -> entry.type == EntityType.CREEPER));
 			}
 		}
 	}
@@ -56,6 +56,6 @@ public class CamoRegistry {
 	}
 
 	private static Item.Properties itemBuilder() {
-		return new Item.Properties().group(ItemGroup.MISC);
+		return new Item.Properties().tab(ItemGroup.TAB_MISC);
 	}
 }

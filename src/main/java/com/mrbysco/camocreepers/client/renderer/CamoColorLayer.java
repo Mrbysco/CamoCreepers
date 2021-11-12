@@ -29,43 +29,43 @@ public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T
 	@Override
 	public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T camoCreeper, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		if(!camoCreeper.isInvisible()) {
-			EntityModel<T> entityModel = this.getEntityModel();
-			entityModel.setLivingAnimations(camoCreeper, limbSwing, limbSwingAmount, partialTicks);
-			this.getEntityModel().copyModelAttributesTo(entityModel);
-			IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(this.overlayLocation));
-			entityModel.setRotationAngles(camoCreeper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+			EntityModel<T> entityModel = this.getParentModel();
+			entityModel.prepareMobModel(camoCreeper, limbSwing, limbSwingAmount, partialTicks);
+			this.getParentModel().copyPropertiesTo(entityModel);
+			IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(this.overlayLocation));
+			entityModel.setupAnim(camoCreeper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 
-			final World world = camoCreeper.getEntityWorld();
-			final BlockPos pos = camoCreeper.getPosition();
+			final World world = camoCreeper.getCommandSenderWorld();
+			final BlockPos pos = camoCreeper.blockPosition();
 			final Biome biome = world.getBiome(pos);
 			int color;
 			if(world != null && pos != null) {
-				if(biome.getCategory() == Category.NETHER) {
-					if(biome.getRegistryName().equals(Biomes.BASALT_DELTAS.getLocation())) {
+				if(biome.getBiomeCategory() == Category.NETHER) {
+					if(biome.getRegistryName().equals(Biomes.BASALT_DELTAS.location())) {
 						color = 6052956;
 					} else {
 						color = 8733250;
 					}
-				} else if(world.getBiome(pos).getCategory() == Category.THEEND) {
+				} else if(world.getBiome(pos).getBiomeCategory() == Category.THEEND) {
 					color = 15660724;
-				} else if(world.getBiome(pos).getCategory() == Category.MUSHROOM) {
+				} else if(world.getBiome(pos).getBiomeCategory() == Category.MUSHROOM) {
 					color = 9138547;
-				} else if(world.getBlockState(pos.up()).getBlock() == Blocks.CAVE_AIR) {
+				} else if(world.getBlockState(pos.above()).getBlock() == Blocks.CAVE_AIR) {
 					color = 7631988;
-				} else if(biome.getCategory() == Category.DESERT || biome.getCategory() == Category.BEACH) {
+				} else if(biome.getBiomeCategory() == Category.DESERT || biome.getBiomeCategory() == Category.BEACH) {
 					color = 14009494;
 				} else {
-					color = BiomeColors.getGrassColor(world, pos);
+					color = BiomeColors.getAverageGrassColor(world, pos);
 				}
 			} else {
-				color = BiomeColors.getGrassColor(world, pos);
+				color = BiomeColors.getAverageGrassColor(world, pos);
 			}
 
 			final float r = (float)(color >> 16 & 255) / 255.0F;
 			final float g = (float)(color >> 8 & 255) / 255.0F;
 			final float b = (float)(color & 255) / 255.0F;
 
-			entityModel.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
+			entityModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
 		}
 	}
 }
