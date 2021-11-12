@@ -1,16 +1,16 @@
 package com.mrbysco.camocreepers.entity;
 
 import com.mrbysco.camocreepers.CamoRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.level.Level;
 
-public class CamoCreeperEntity extends CreeperEntity {
-	public CamoCreeperEntity(EntityType<? extends CreeperEntity> type, World worldIn) {
+public class CamoCreeperEntity extends Creeper {
+	public CamoCreeperEntity(EntityType<? extends Creeper> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
-	public CamoCreeperEntity(World worldIn) {
+	public CamoCreeperEntity(Level worldIn) {
 		super(CamoRegistry.CAMO_CREEPER.get(), worldIn);
 	}
 }
