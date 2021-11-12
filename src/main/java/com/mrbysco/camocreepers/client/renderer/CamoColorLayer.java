@@ -33,7 +33,7 @@ public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T
 			EntityModel<T> entityModel = this.getParentModel();
 			entityModel.prepareMobModel(camoCreeper, limbSwing, limbSwingAmount, partialTicks);
 			this.getParentModel().copyPropertiesTo(entityModel);
-			VertexConsumer ivertexbuilder = bufferSource.getBuffer(RenderType.entityCutoutNoCull(this.overlayLocation));
+			VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(this.overlayLocation));
 			entityModel.setupAnim(camoCreeper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 
 			final Level world = camoCreeper.getCommandSenderWorld();
@@ -67,7 +67,7 @@ public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T
 			final float g = (float)(color >> 8 & 255) / 255.0F;
 			final float b = (float)(color & 255) / 255.0F;
 
-			entityModel.renderToBuffer(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
+			entityModel.renderToBuffer(poseStack, vertexConsumer, packedLightIn, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
 		}
 	}
 }
