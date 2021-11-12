@@ -28,12 +28,12 @@ public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T
 	}
 
 	@Override
-	public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, T camoCreeper, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLightIn, T camoCreeper, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		if(!camoCreeper.isInvisible()) {
 			EntityModel<T> entityModel = this.getParentModel();
 			entityModel.prepareMobModel(camoCreeper, limbSwing, limbSwingAmount, partialTicks);
 			this.getParentModel().copyPropertiesTo(entityModel);
-			VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(this.overlayLocation));
+			VertexConsumer ivertexbuilder = bufferSource.getBuffer(RenderType.entityCutoutNoCull(this.overlayLocation));
 			entityModel.setupAnim(camoCreeper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 
 			final Level world = camoCreeper.getCommandSenderWorld();
@@ -67,7 +67,7 @@ public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T
 			final float g = (float)(color >> 8 & 255) / 255.0F;
 			final float b = (float)(color & 255) / 255.0F;
 
-			entityModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
+			entityModel.renderToBuffer(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
 		}
 	}
 }
