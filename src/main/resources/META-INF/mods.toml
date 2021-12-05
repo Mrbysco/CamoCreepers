@@ -18,3 +18,9 @@ mandatory=true
 versionRange="[1.16.5,1.17)"
 ordering="NONE"
 side="BOTH"
+[[dependencies.camocreepers]]
+modId="forge"
+mandatory=true
+versionRange="[36.2.17,)"
+ordering="NONE"
+side="BOTH"

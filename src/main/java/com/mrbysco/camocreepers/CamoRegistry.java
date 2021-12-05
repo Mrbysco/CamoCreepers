@@ -2,7 +2,6 @@ package com.mrbysco.camocreepers;
 
 import com.mrbysco.camocreepers.config.CamoConfig;
 import com.mrbysco.camocreepers.entity.CamoCreeperEntity;
-import com.mrbysco.camocreepers.item.CustomSpawnEggItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -11,6 +10,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.biome.MobSpawnInfo.Spawners;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.fml.RegistryObject;
@@ -28,7 +28,7 @@ public class CamoRegistry {
 					.sized(0.6F, 1.7F).clientTrackingRange(8)));
 
 	public static final RegistryObject<Item> CAMO_CREEPER_SPAWN_EGG = ITEMS.register("camo_creeper_spawn_egg" , () ->
-			new CustomSpawnEggItem(() -> CAMO_CREEPER.get(), 894731, 0, itemBuilder()));
+			new ForgeSpawnEggItem(() -> CAMO_CREEPER.get(), 894731, 0, itemBuilder()));
 
 
 	public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
@@ -46,7 +46,7 @@ public class CamoRegistry {
 				}
 			}
 			if(CamoConfig.COMMON.overrideCreeperSpawns.get()) {
-				info.getMobs(EntityClassification.MONSTER).removeIf((entry -> entry.type == EntityType.CREEPER));
+				spawns.removeIf((data) -> data.type == EntityType.CREEPER);
 			}
 		}
 	}
