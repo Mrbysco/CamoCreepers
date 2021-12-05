@@ -46,7 +46,7 @@ public class CamoRegistry {
 				}
 			}
 			if(CamoConfig.COMMON.overrideCreeperSpawns.get()) {
-				info.getMobs(MobCategory.MONSTER).unwrap().removeIf((entry -> entry.type == EntityType.CREEPER));
+				spawns.removeIf((data) -> data.type == EntityType.CREEPER);
 			}
 		}
 	}
