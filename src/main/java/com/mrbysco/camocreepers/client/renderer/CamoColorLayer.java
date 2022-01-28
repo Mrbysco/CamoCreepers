@@ -36,23 +36,23 @@ public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T
 			VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(this.overlayLocation));
 			entityModel.setupAnim(camoCreeper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 
-			final Level world = camoCreeper.getCommandSenderWorld();
+			final Level level = camoCreeper.getCommandSenderWorld();
 			final BlockPos pos = camoCreeper.blockPosition();
-			final Biome biome = world.getBiome(pos);
-			int baseColor = BiomeColors.getAverageGrassColor(world, pos);
+			final Biome biome = level.getBiome(pos);
+			int baseColor = BiomeColors.getAverageGrassColor(level, pos);
 			int color;
-			if(world != null && pos != null) {
+			if(level != null && pos != null) {
 				if(CamoConfig.COMMON.netherCamo.get() && biome.getBiomeCategory() == BiomeCategory.NETHER) {
 					if(biome.getRegistryName() != null && biome.getRegistryName().equals(Biomes.BASALT_DELTAS.location())) {
 						color = 6052956;
 					} else {
 						color = 8733250;
 					}
-				} else if(CamoConfig.COMMON.endCamo.get() && world.getBiome(pos).getBiomeCategory() == BiomeCategory.THEEND) {
+				} else if(CamoConfig.COMMON.endCamo.get() && level.getBiome(pos).getBiomeCategory() == BiomeCategory.THEEND) {
 					color = 15660724;
-				} else if(world.getBiome(pos).getBiomeCategory() == BiomeCategory.MUSHROOM) {
+				} else if(level.getBiome(pos).getBiomeCategory() == BiomeCategory.MUSHROOM) {
 					color = 9138547;
-				} else if(CamoConfig.COMMON.caveCamo.get() && world.getBlockState(pos.above()).getBlock() == Blocks.CAVE_AIR) {
+				} else if(CamoConfig.COMMON.caveCamo.get() && pos.getY() < level.getSeaLevel() && !level.canSeeSky(pos)) {
 					color = 7631988;
 				} else if(biome.getBiomeCategory() == BiomeCategory.DESERT || biome.getBiomeCategory() == BiomeCategory.BEACH) {
 					color = 14009494;
