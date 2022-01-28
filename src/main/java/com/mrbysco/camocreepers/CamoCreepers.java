@@ -10,6 +10,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,8 +31,14 @@ public class CamoCreepers {
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, CamoRegistry::addSpawn);
         eventBus.addListener(CamoRegistry::registerEntityAttributes);
 
+        eventBus.addListener(this::setup);
+
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             eventBus.addListener(ClientHandler::registerEntityRenders);
         });
+    }
+
+    private void setup(final FMLCommonSetupEvent event) {
+        CamoRegistry.entityAttributes();
     }
 }
