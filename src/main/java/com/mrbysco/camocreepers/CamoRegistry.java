@@ -4,12 +4,15 @@ import com.mrbysco.camocreepers.config.CamoConfig;
 import com.mrbysco.camocreepers.entity.CamoCreeperEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.biome.MobSpawnInfo.Spawners;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -30,6 +33,9 @@ public class CamoRegistry {
 	public static final RegistryObject<Item> CAMO_CREEPER_SPAWN_EGG = ITEMS.register("camo_creeper_spawn_egg" , () ->
 			new ForgeSpawnEggItem(() -> CAMO_CREEPER.get(), 894731, 0, itemBuilder()));
 
+	public static void entityAttributes() {
+		EntitySpawnPlacementRegistry.register(CamoRegistry.CAMO_CREEPER.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::checkMobSpawnRules);
+	}
 
 	public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
 		event.put(CAMO_CREEPER.get(), CamoCreeperEntity.createAttributes().build());
