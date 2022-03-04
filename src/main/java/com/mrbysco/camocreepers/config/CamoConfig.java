@@ -75,6 +75,6 @@ public class CamoConfig {
 
 	@SubscribeEvent
 	public static void onFileChange(final ModConfigEvent.Reloading configEvent) {
-		CamoCreepers.LOGGER.debug("Camo Creepers' config just got changed on the file system!");
+		CamoCreepers.LOGGER.warn("Camo Creepers' config just got changed on the file system!");
 	}
 }

@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -29,7 +30,7 @@ public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T
 
 	@Override
 	public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLightIn, T camoCreeper, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-		if(!camoCreeper.isInvisible()) {
+		if (!camoCreeper.isInvisible()) {
 			EntityModel<T> entityModel = this.getParentModel();
 			entityModel.prepareMobModel(camoCreeper, limbSwing, limbSwingAmount, partialTicks);
 			this.getParentModel().copyPropertiesTo(entityModel);
@@ -38,23 +39,24 @@ public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T
 
 			final Level level = camoCreeper.getCommandSenderWorld();
 			final BlockPos pos = camoCreeper.blockPosition();
-			final Biome biome = level.getBiome(pos);
+			final Holder<Biome> biome = level.getBiome(pos);
+			final ResourceLocation location = biome.unwrapKey().get().location();
 			int baseColor = BiomeColors.getAverageGrassColor(level, pos);
 			int color;
-			if(level != null && pos != null) {
-				if(CamoConfig.COMMON.netherCamo.get() && biome.getBiomeCategory() == BiomeCategory.NETHER) {
-					if(biome.getRegistryName() != null && biome.getRegistryName().equals(Biomes.BASALT_DELTAS.location())) {
+			if (level != null && pos != null) {
+				if (CamoConfig.COMMON.netherCamo.get() && Biome.getBiomeCategory(biome) == BiomeCategory.NETHER) {
+					if (location != null && location.equals(Biomes.BASALT_DELTAS.location())) {
 						color = 6052956;
 					} else {
 						color = 8733250;
 					}
-				} else if(CamoConfig.COMMON.endCamo.get() && level.getBiome(pos).getBiomeCategory() == BiomeCategory.THEEND) {
+				} else if (CamoConfig.COMMON.endCamo.get() && Biome.getBiomeCategory(biome) == BiomeCategory.THEEND) {
 					color = 15660724;
-				} else if(level.getBiome(pos).getBiomeCategory() == BiomeCategory.MUSHROOM) {
+				} else if (Biome.getBiomeCategory(biome) == BiomeCategory.MUSHROOM) {
 					color = 9138547;
-				} else if(CamoConfig.COMMON.caveCamo.get() && pos.getY() < level.getSeaLevel() && !level.canSeeSky(pos)) {
+				} else if (CamoConfig.COMMON.caveCamo.get() && pos.getY() < level.getSeaLevel() && !level.canSeeSky(pos)) {
 					color = 7631988;
-				} else if(biome.getBiomeCategory() == BiomeCategory.DESERT || biome.getBiomeCategory() == BiomeCategory.BEACH) {
+				} else if (Biome.getBiomeCategory(biome) == BiomeCategory.DESERT || Biome.getBiomeCategory(biome) == BiomeCategory.BEACH) {
 					color = 14009494;
 				} else {
 					color = baseColor;
@@ -63,9 +65,9 @@ public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T
 				color = baseColor;
 			}
 
-			final float r = (float)(color >> 16 & 255) / 255.0F;
-			final float g = (float)(color >> 8 & 255) / 255.0F;
-			final float b = (float)(color & 255) / 255.0F;
+			final float r = (float) (color >> 16 & 255) / 255.0F;
+			final float g = (float) (color >> 8 & 255) / 255.0F;
+			final float b = (float) (color & 255) / 255.0F;
 
 			entityModel.renderToBuffer(poseStack, vertexConsumer, packedLightIn, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
 		}

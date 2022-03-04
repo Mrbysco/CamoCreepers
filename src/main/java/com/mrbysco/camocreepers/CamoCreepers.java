@@ -17,28 +17,28 @@ import org.apache.logging.log4j.Logger;
 
 @Mod(CamoCreepers.MOD_ID)
 public class CamoCreepers {
-    public static final String MOD_ID = "camocreepers";
-    public static final Logger LOGGER = LogManager.getLogger();
+	public static final String MOD_ID = "camocreepers";
+	public static final Logger LOGGER = LogManager.getLogger();
 
-    public CamoCreepers() {
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CamoConfig.commonSpec);
-        eventBus.register(CamoConfig.class);
+	public CamoCreepers() {
+		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CamoConfig.commonSpec);
+		eventBus.register(CamoConfig.class);
 
-        CamoRegistry.ITEMS.register(eventBus);
-        CamoRegistry.ENTITIES.register(eventBus);
+		CamoRegistry.ITEMS.register(eventBus);
+		CamoRegistry.ENTITIES.register(eventBus);
 
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, CamoRegistry::addSpawn);
-        eventBus.addListener(CamoRegistry::registerEntityAttributes);
+		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, CamoRegistry::addSpawn);
+		eventBus.addListener(CamoRegistry::registerEntityAttributes);
 
-        eventBus.addListener(this::setup);
+		eventBus.addListener(this::setup);
 
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            eventBus.addListener(ClientHandler::registerEntityRenders);
-        });
-    }
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+			eventBus.addListener(ClientHandler::registerEntityRenders);
+		});
+	}
 
-    private void setup(final FMLCommonSetupEvent event) {
-        CamoRegistry.entityAttributes();
-    }
+	private void setup(final FMLCommonSetupEvent event) {
+		CamoRegistry.entityAttributes();
+	}
 }

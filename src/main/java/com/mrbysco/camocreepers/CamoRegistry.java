@@ -30,7 +30,7 @@ public class CamoRegistry {
 			register("camo_creeper", EntityType.Builder.<CamoCreeperEntity>of(CamoCreeperEntity::new, MobCategory.MONSTER)
 					.sized(0.6F, 1.7F).clientTrackingRange(8)));
 
-	public static final RegistryObject<Item> CAMO_CREEPER_SPAWN_EGG = ITEMS.register("camo_creeper_spawn_egg" , () ->
+	public static final RegistryObject<Item> CAMO_CREEPER_SPAWN_EGG = ITEMS.register("camo_creeper_spawn_egg", () ->
 			new ForgeSpawnEggItem(CAMO_CREEPER, 894731, 0, itemBuilder()));
 
 	public static void entityAttributes() {
@@ -43,15 +43,15 @@ public class CamoRegistry {
 
 	public static void addSpawn(BiomeLoadingEvent event) {
 		Biome biome = ForgeRegistries.BIOMES.getValue(event.getName());
-		if(biome != null) {
+		if (biome != null) {
 			MobSpawnSettings info = biome.getMobSettings();
 			List<SpawnerData> spawns = event.getSpawns().getSpawner(MobCategory.MONSTER);
-			for(SpawnerData entry : info.getMobs(MobCategory.MONSTER).unwrap()) {
-				if(entry.type == EntityType.CREEPER) {
+			for (SpawnerData entry : info.getMobs(MobCategory.MONSTER).unwrap()) {
+				if (entry.type == EntityType.CREEPER) {
 					spawns.add(new MobSpawnSettings.SpawnerData(CAMO_CREEPER.get(), Math.min(1, CamoConfig.COMMON.camoCreeperWeight.get()), CamoConfig.COMMON.camoCreeperMin.get(), CamoConfig.COMMON.camoCreeperMax.get()));
 				}
 			}
-			if(CamoConfig.COMMON.overrideCreeperSpawns.get()) {
+			if (CamoConfig.COMMON.overrideCreeperSpawns.get()) {
 				spawns.removeIf((data) -> data.type == EntityType.CREEPER);
 			}
 		}
