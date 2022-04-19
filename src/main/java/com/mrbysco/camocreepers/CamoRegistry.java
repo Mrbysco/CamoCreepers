@@ -3,65 +3,44 @@ package com.mrbysco.camocreepers;
 import com.mrbysco.camocreepers.config.CamoConfig;
 import com.mrbysco.camocreepers.entity.CamoCreeperEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.MobSpawnInfo;
-import net.minecraft.world.biome.MobSpawnInfo.Spawners;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraftforge.common.ForgeSpawnEggItem;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class CamoRegistry {
-	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, CamoCreepers.MOD_ID);
-	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, CamoCreepers.MOD_ID);
 
-	public static final RegistryObject<EntityType<CamoCreeperEntity>> CAMO_CREEPER = ENTITIES.register("camo_creeper", () ->
-			register("camo_creeper", EntityType.Builder.<CamoCreeperEntity>of(CamoCreeperEntity::new, EntityClassification.MONSTER)
-					.sized(0.6F, 1.7F).clientTrackingRange(8)));
+	private static int ID = 0;
 
-	public static final RegistryObject<Item> CAMO_CREEPER_SPAWN_EGG = ITEMS.register("camo_creeper_spawn_egg" , () ->
-			new ForgeSpawnEggItem(() -> CAMO_CREEPER.get(), 894731, 0, itemBuilder()));
-
-	public static void entityAttributes() {
-		EntitySpawnPlacementRegistry.register(CamoRegistry.CAMO_CREEPER.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::checkMobSpawnRules);
+	public static void register() {
+		registerEntity("camo_creeper", CamoCreeperEntity.class, "CamoCreeper", 80, 3, true,
+				894731, 0);
 	}
 
-	public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
-		event.put(CAMO_CREEPER.get(), CamoCreeperEntity.createAttributes().build());
+	public static void registerEntity(String registryName, Class<? extends Entity> entityClass, String entityName, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int eggPrimary, int eggSecondary) {
+		EntityRegistry.registerModEntity(new ResourceLocation(CamoCreepers.MOD_ID, registryName), entityClass, CamoCreepers.MOD_PREFIX + entityName, ID,
+				CamoCreepers.instance, trackingRange, updateFrequency, sendsVelocityUpdates, eggPrimary, eggSecondary);
+		ID++;
 	}
 
-	public static void addSpawn(BiomeLoadingEvent event) {
-		Biome biome = ForgeRegistries.BIOMES.getValue(event.getName());
-		if(biome != null) {
-			MobSpawnInfo info = biome.getMobSettings();
-			List<Spawners> spawns = event.getSpawns().getSpawner(EntityClassification.MONSTER);
-			for(Spawners entry : info.getMobs(EntityClassification.MONSTER)) {
-				if(entry.type == EntityType.CREEPER) {
-					spawns.add(new MobSpawnInfo.Spawners(CAMO_CREEPER.get(), Math.min(1, CamoConfig.COMMON.camoCreeperWeight.get()), CamoConfig.COMMON.camoCreeperMin.get(), CamoConfig.COMMON.camoCreeperMax.get()));
+	public static void registerBiomes() {
+		for (Biome biome : Biome.REGISTRY) {
+			for (Biome.SpawnListEntry entry : new ArrayList<>(biome.getSpawnableList(EnumCreatureType.MONSTER))) {
+				if (entry.entityClass == EntityCreeper.class) {
+					EntityRegistry.addSpawn(CamoCreeperEntity.class, CamoConfig.general.camoCreeperWeight, CamoConfig.general.camoCreeperMin,
+							CamoConfig.general.camoCreeperMax, EnumCreatureType.MONSTER, biome);
 				}
 			}
-			if(CamoConfig.COMMON.overrideCreeperSpawns.get()) {
-				spawns.removeIf((data) -> data.type == EntityType.CREEPER);
+			if (CamoConfig.general.overrideCreeperSpawns) {
+				biome.getSpawnableList(EnumCreatureType.MONSTER).forEach(entry -> {
+					if (entry.entityClass == EntityCreeper.class) {
+						EntityRegistry.removeSpawn(EntityCreeper.class, EnumCreatureType.MONSTER, biome);
+					}
+				});
 			}
 		}
-	}
-
-	public static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> builder) {
-		return builder.build(id);
-	}
-
-	private static Item.Properties itemBuilder() {
-		return new Item.Properties().tab(ItemGroup.TAB_MISC);
 	}
 }

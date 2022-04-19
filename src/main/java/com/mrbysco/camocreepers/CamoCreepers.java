@@ -1,44 +1,56 @@
 package com.mrbysco.camocreepers;
 
-import com.mrbysco.camocreepers.client.ClientHandler;
 import com.mrbysco.camocreepers.config.CamoConfig;
-import net.minecraftforge.api.distmarker.Dist;
+import com.mrbysco.camocreepers.proxy.CommonProxy;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(CamoCreepers.MOD_ID)
+@Mod(modid = CamoCreepers.MOD_ID,
+		name = CamoCreepers.MOD_NAME,
+		acceptedMinecraftVersions = CamoCreepers.ACCEPTED_VERSIONS)
 public class CamoCreepers {
-    public static final String MOD_ID = "camocreepers";
-    public static final Logger LOGGER = LogManager.getLogger();
+	public static final String MOD_ID = "camocreepers";
+	public static final String MOD_PREFIX = MOD_ID + ":";
+	public static final String MOD_NAME = "Camo Creepers";
+	public static final String ACCEPTED_VERSIONS = "[1.12]";
+	public static final String CLIENT_PROXY_CLASS = "com.mrbysco.camocreepers.proxy.ClientProxy";
+	public static final String SERVER_PROXY_CLASS = "com.mrbysco.camocreepers.proxy.ServerProxy";
 
-    public CamoCreepers() {
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CamoConfig.commonSpec);
-        eventBus.register(CamoConfig.class);
+	public static final Logger LOGGER = LogManager.getLogger();
 
-        CamoRegistry.ITEMS.register(eventBus);
-        CamoRegistry.ENTITIES.register(eventBus);
+	@Instance(CamoCreepers.MOD_ID)
+	public static CamoCreepers instance;
 
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, CamoRegistry::addSpawn);
-        eventBus.addListener(CamoRegistry::registerEntityAttributes);
+	@SidedProxy(clientSide = CamoCreepers.CLIENT_PROXY_CLASS, serverSide = CamoCreepers.SERVER_PROXY_CLASS)
+	public static CommonProxy proxy;
 
-        eventBus.addListener(this::setup);
+	@EventHandler
+	public void PreInit(FMLPreInitializationEvent event) {
+		LOGGER.info("Registering CamoCreepers Config");
+		MinecraftForge.EVENT_BUS.register(new CamoConfig());
 
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            eventBus.addListener(ClientHandler::onClientSetup);
-        });
-    }
+		CamoRegistry.register();
 
-    private void setup(final FMLCommonSetupEvent event) {
-        CamoRegistry.entityAttributes();
-    }
+		proxy.Preinit();
+	}
+
+	@EventHandler
+	public void init(FMLInitializationEvent event) {
+		CamoRegistry.registerBiomes();
+
+		proxy.Init();
+	}
+
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event) {
+		proxy.PostInit();
+	}
 }

@@ -1,0 +1,8 @@
+#Config
+camocreepers.config.title=Camo Creepers
+
+#Items
+item.camocreepers.camo_creeper_spawn_egg=Camo Creeper Spawn Egg
+
+#Entities
+entity.camocreepers:CamoCreeper.name=Camo Creeper

@@ -1,0 +1,18 @@
+[
+  {
+	"modid": "camocreepers",
+	"name": "Camo Creepers",
+	"description": "Creepers that blend in more with the environment.",
+	"version": "${version}",
+	"mcversion": "${mcversion}",
+	"url": "",
+	"updateUrl": "",
+	"authorList": [
+	  "Mrbysco"
+	],
+	"credits": "",
+	"logoFile": "",
+	"screenshots": [],
+	"dependencies": []
+  }
+]

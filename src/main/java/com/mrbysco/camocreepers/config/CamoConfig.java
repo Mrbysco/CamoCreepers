@@ -1,80 +1,62 @@
 package com.mrbysco.camocreepers.config;
 
 import com.mrbysco.camocreepers.CamoCreepers;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
-import net.minecraftforge.common.ForgeConfigSpec.IntValue;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.config.ModConfig;
-import org.apache.commons.lang3.tuple.Pair;
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@Config(modid = CamoCreepers.MOD_ID)
+@Config.LangKey("camocreepers.config.title")
 public class CamoConfig {
-	public static class Common {
-		public final BooleanValue overrideCreeperSpawns;
-		public final IntValue camoCreeperWeight;
-		public final IntValue camoCreeperMin;
-		public final IntValue camoCreeperMax;
 
-		public final BooleanValue netherCamo;
-		public final BooleanValue endCamo;
-		public final BooleanValue caveCamo;
+	@Config.Comment({"General settings"})
+	public static General general = new General();
 
-		Common(ForgeConfigSpec.Builder builder) {
-			builder.comment("General settings")
-					.push("General");
+	public static class General{
+		@Config.RequiresMcRestart
+		@Config.Comment("Override vanilla creeper spawns with the Camo Creepers [default: true]")
+		public boolean overrideCreeperSpawns = false;
 
-			overrideCreeperSpawns = builder
-					.comment("Override vanilla creeper spawns with the Camo Creepers [default: true]")
-					.define("overrideCreeperSpawns", true);
+		@Config.RequiresMcRestart
+		@Config.Comment("The spawn weight of the Camo Creeper [default: 100]")
+		@Config.RangeInt(min = 1)
+		public int camoCreeperWeight = 100;
 
-			camoCreeperWeight = builder
-					.comment("The spawn weight of the Camo Creeper [default: 100]")
-					.defineInRange("camoCreeperWeight", 100, 1, Integer.MAX_VALUE);
+		@Config.RequiresMcRestart
+		@Config.Comment("The min group size of the Camo Creeper [default: 4]")
+		@Config.RangeInt(min = 1)
+		public int camoCreeperMin = 4;
 
-			camoCreeperMin = builder
-					.comment("The min group size of the Camo Creeper [default: 4]")
-					.defineInRange("camoCreeperMin", 4, 1, Integer.MAX_VALUE);
+		@Config.RequiresMcRestart
+		@Config.Comment("The max group size of the Camo Creeper [default: 4]")
+		@Config.RangeInt(min = 1)
+		public int camoCreeperMax = 4;
+	}
 
-			camoCreeperMax = builder
-					.comment("The max group size of the Camo Creeper [default: 4]")
-					.defineInRange("camoCreeperMax", 4, 1, Integer.MAX_VALUE);
+	@Config.Comment({"Camo settings"})
+	public static Camo camo = new Camo();
 
-			builder.pop();
-			builder.comment("Camo settings")
-					.push("Camo");
+	public static class Camo{
+		@Config.Comment("Allow Camo Creepers to camouflage in the Nether [default: true]")
+		public boolean netherCamo = true;
 
-			netherCamo = builder
-					.comment("Allow Camo Creepers to camouflage in the Nether [default: true]")
-					.define("netherCamo", true);
+		@Config.Comment("Allow Camo Creepers to camouflage in the End [default: true]")
+		public boolean endCamo = true;
 
-			endCamo = builder
-					.comment("Allow Camo Creepers to camouflage in the End [default: true]")
-					.define("endCamo", true);
+		@Config.Comment("Allow Camo Creepers to camouflage in caves [default: true]")
+		public boolean caveCamo = true;
+	}
 
-			caveCamo = builder
-					.comment("Allow Camo Creepers to camouflage in caves [default: true]")
-					.define("caveCamo", true);
+	@Mod.EventBusSubscriber(modid = CamoCreepers.MOD_ID)
+	private static class EventHandler {
 
-			builder.pop();
+		@SubscribeEvent
+		public static void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
+			if (event.getModID().equals(CamoCreepers.MOD_ID)) {
+				ConfigManager.sync(CamoCreepers.MOD_ID, Config.Type.INSTANCE);
+			}
 		}
-	}
-
-	public static final ForgeConfigSpec commonSpec;
-	public static final Common COMMON;
-
-	static {
-		final Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
-		commonSpec = specPair.getRight();
-		COMMON = specPair.getLeft();
-	}
-
-	@SubscribeEvent
-	public static void onLoad(final ModConfig.Loading configEvent) {
-		CamoCreepers.LOGGER.debug("Loaded Camo Creepers' config file {}", configEvent.getConfig().getFileName());
-	}
-
-	@SubscribeEvent
-	public static void onFileChange(final ModConfig.Reloading configEvent) {
-		CamoCreepers.LOGGER.debug("Camo Creepers' config just got changed on the file system!");
 	}
 }
