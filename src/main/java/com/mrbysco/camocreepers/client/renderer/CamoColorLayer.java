@@ -2,7 +2,6 @@ package com.mrbysco.camocreepers.client.renderer;
 
 import com.mrbysco.camocreepers.config.CamoConfig;
 import com.mrbysco.camocreepers.entity.CamoCreeperEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;

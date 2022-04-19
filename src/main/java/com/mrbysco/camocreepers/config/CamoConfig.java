@@ -14,7 +14,7 @@ public class CamoConfig {
 	@Config.Comment({"General settings"})
 	public static General general = new General();
 
-	public static class General{
+	public static class General {
 		@Config.RequiresMcRestart
 		@Config.Comment("Override vanilla creeper spawns with the Camo Creepers [default: true]")
 		public boolean overrideCreeperSpawns = false;
@@ -38,7 +38,7 @@ public class CamoConfig {
 	@Config.Comment({"Camo settings"})
 	public static Camo camo = new Camo();
 
-	public static class Camo{
+	public static class Camo {
 		@Config.Comment("Allow Camo Creepers to camouflage in the Nether [default: true]")
 		public boolean netherCamo = true;
 
