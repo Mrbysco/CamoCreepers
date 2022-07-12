@@ -5,9 +5,9 @@ import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import com.mrbysco.camocreepers.CamoCreepers;
+import com.mrbysco.camocreepers.modifier.AddEntityToSameBiomesModifier;
 import com.mrbysco.camocreepers.modifier.RemoveCreeperModifier;
 import com.mrbysco.camocreepers.registry.CamoRegistry;
-import com.mrbysco.camocreepers.modifier.AddEntityToSameBiomesModifier;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.loot.EntityLoot;
@@ -26,9 +26,9 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.JsonCodecProvider;
 import net.minecraftforge.common.world.BiomeModifier;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -86,7 +86,7 @@ public class CamoDatagen {
 
 			@Override
 			protected Iterable<EntityType<?>> getKnownEntities() {
-				Stream<EntityType<?>> entityTypeStream = CamoRegistry.ENTITIES.getEntries().stream().map(RegistryObject::get);
+				Stream<EntityType<?>> entityTypeStream = CamoRegistry.ENTITY_TYPES.getEntries().stream().map(RegistryObject::get);
 				return (Iterable<EntityType<?>>) entityTypeStream::iterator;
 			}
 		}

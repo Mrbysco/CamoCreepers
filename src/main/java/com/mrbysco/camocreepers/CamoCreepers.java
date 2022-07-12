@@ -25,7 +25,7 @@ public class CamoCreepers {
 		eventBus.register(CamoConfig.class);
 
 		CamoRegistry.ITEMS.register(eventBus);
-		CamoRegistry.ENTITIES.register(eventBus);
+		CamoRegistry.ENTITY_TYPES.register(eventBus);
 		CamoRegistry.BIOME_MODIFIER_SERIALIZERS.register(eventBus);
 
 		eventBus.addListener(CamoRegistry::registerEntityAttributes);

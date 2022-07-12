@@ -24,11 +24,11 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class CamoRegistry {
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, CamoCreepers.MOD_ID);
-	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, CamoCreepers.MOD_ID);
+	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, CamoCreepers.MOD_ID);
 	public static final DeferredRegister<Codec<? extends BiomeModifier>> BIOME_MODIFIER_SERIALIZERS = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, CamoCreepers.MOD_ID);
 
 
-	public static final RegistryObject<EntityType<CamoCreeperEntity>> CAMO_CREEPER = ENTITIES.register("camo_creeper", () ->
+	public static final RegistryObject<EntityType<CamoCreeperEntity>> CAMO_CREEPER = ENTITY_TYPES.register("camo_creeper", () ->
 			register("camo_creeper", EntityType.Builder.<CamoCreeperEntity>of(CamoCreeperEntity::new, MobCategory.MONSTER)
 					.sized(0.6F, 1.7F).clientTrackingRange(8)));
 
