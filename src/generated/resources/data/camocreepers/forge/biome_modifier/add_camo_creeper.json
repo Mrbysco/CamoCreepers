@@ -1,0 +1,8 @@
+{
+  "type": "camocreepers:add_entity_to_same_biomes",
+  "maxGroup": 4,
+  "minGroup": 4,
+  "newType": "camocreepers:camo_creeper",
+  "originalType": "minecraft:creeper",
+  "weight": 100
+}

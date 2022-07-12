@@ -3,7 +3,6 @@ package com.mrbysco.camocreepers.config;
 import com.mrbysco.camocreepers.CamoCreepers;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
-import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import org.apache.commons.lang3.tuple.Pair;
@@ -11,9 +10,6 @@ import org.apache.commons.lang3.tuple.Pair;
 public class CamoConfig {
 	public static class Common {
 		public final BooleanValue overrideCreeperSpawns;
-		public final IntValue camoCreeperWeight;
-		public final IntValue camoCreeperMin;
-		public final IntValue camoCreeperMax;
 
 		public final BooleanValue netherCamo;
 		public final BooleanValue endCamo;
@@ -26,18 +22,6 @@ public class CamoConfig {
 			overrideCreeperSpawns = builder
 					.comment("Override vanilla creeper spawns with the Camo Creepers [default: true]")
 					.define("overrideCreeperSpawns", true);
-
-			camoCreeperWeight = builder
-					.comment("The spawn weight of the Camo Creeper [default: 100]")
-					.defineInRange("camoCreeperWeight", 100, 1, Integer.MAX_VALUE);
-
-			camoCreeperMin = builder
-					.comment("The min group size of the Camo Creeper [default: 4]")
-					.defineInRange("camoCreeperMin", 4, 1, Integer.MAX_VALUE);
-
-			camoCreeperMax = builder
-					.comment("The max group size of the Camo Creeper [default: 4]")
-					.defineInRange("camoCreeperMax", 4, 1, Integer.MAX_VALUE);
 
 			builder.pop();
 			builder.comment("Camo settings")

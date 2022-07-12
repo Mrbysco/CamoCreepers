@@ -14,11 +14,11 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biome.BiomeCategory;
 import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.Tags;
 
 public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
 	private final ResourceLocation overlayLocation;
@@ -44,19 +44,19 @@ public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T
 			int baseColor = BiomeColors.getAverageGrassColor(level, pos);
 			int color;
 			if (level != null && pos != null) {
-				if (CamoConfig.COMMON.netherCamo.get() && Biome.getBiomeCategory(biome) == BiomeCategory.NETHER) {
+				if (CamoConfig.COMMON.netherCamo.get() && biome.is(BiomeTags.IS_NETHER)) {
 					if (location != null && location.equals(Biomes.BASALT_DELTAS.location())) {
 						color = 6052956;
 					} else {
 						color = 8733250;
 					}
-				} else if (CamoConfig.COMMON.endCamo.get() && Biome.getBiomeCategory(biome) == BiomeCategory.THEEND) {
+				} else if (CamoConfig.COMMON.endCamo.get() && biome.is(BiomeTags.IS_END)) {
 					color = 15660724;
-				} else if (Biome.getBiomeCategory(biome) == BiomeCategory.MUSHROOM) {
+				} else if (biome.is(Tags.Biomes.IS_MUSHROOM)) {
 					color = 9138547;
 				} else if (CamoConfig.COMMON.caveCamo.get() && pos.getY() < level.getSeaLevel() && !level.canSeeSky(pos)) {
 					color = 7631988;
-				} else if (Biome.getBiomeCategory(biome) == BiomeCategory.DESERT || Biome.getBiomeCategory(biome) == BiomeCategory.BEACH) {
+				} else if (biome.is(Tags.Biomes.IS_SANDY) || biome.is(BiomeTags.IS_BEACH)) {
 					color = 14009494;
 				} else {
 					color = baseColor;

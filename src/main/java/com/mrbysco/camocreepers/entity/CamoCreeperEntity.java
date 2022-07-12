@@ -1,6 +1,6 @@
 package com.mrbysco.camocreepers.entity;
 
-import com.mrbysco.camocreepers.CamoRegistry;
+import com.mrbysco.camocreepers.registry.CamoRegistry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.level.Level;

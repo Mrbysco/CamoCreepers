@@ -2,9 +2,8 @@ package com.mrbysco.camocreepers;
 
 import com.mrbysco.camocreepers.client.ClientHandler;
 import com.mrbysco.camocreepers.config.CamoConfig;
+import com.mrbysco.camocreepers.registry.CamoRegistry;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -27,8 +26,8 @@ public class CamoCreepers {
 
 		CamoRegistry.ITEMS.register(eventBus);
 		CamoRegistry.ENTITIES.register(eventBus);
+		CamoRegistry.BIOME_MODIFIER_SERIALIZERS.register(eventBus);
 
-		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, CamoRegistry::addSpawn);
 		eventBus.addListener(CamoRegistry::registerEntityAttributes);
 
 		eventBus.addListener(this::setup);

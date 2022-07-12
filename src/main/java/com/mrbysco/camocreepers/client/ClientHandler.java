@@ -1,6 +1,6 @@
 package com.mrbysco.camocreepers.client;
 
-import com.mrbysco.camocreepers.CamoRegistry;
+import com.mrbysco.camocreepers.registry.CamoRegistry;
 import com.mrbysco.camocreepers.client.renderer.CamoCreeperRenderer;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 
