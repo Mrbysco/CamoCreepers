@@ -18,7 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biome.BiomeCategory;
 import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.block.Blocks;
 
 public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
 	private final ResourceLocation overlayLocation;
