@@ -4,7 +4,6 @@ import com.mrbysco.camocreepers.client.ClientHandler;
 import com.mrbysco.camocreepers.config.CamoConfig;
 import com.mrbysco.camocreepers.registry.CamoRegistry;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -16,8 +15,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.List;
 
 @Mod(CamoCreepers.MOD_ID)
 public class CamoCreepers {
@@ -48,9 +45,8 @@ public class CamoCreepers {
 	}
 
 	private void addTabContents(final CreativeModeTabEvent.BuildContents event) {
-		if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-			List<ItemStack> stacks = CamoRegistry.ITEMS.getEntries().stream().map(reg -> new ItemStack(reg.get())).toList();
-			event.acceptAll(stacks);
+		if (event.getTab() == CreativeModeTabs.SPAWN_EGGS) {
+			event.accept(CamoRegistry.CAMO_CREEPER_SPAWN_EGG);
 		}
 	}
 }
