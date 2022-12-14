@@ -6,13 +6,12 @@ import com.mrbysco.camocreepers.CamoCreepers;
 import com.mrbysco.camocreepers.entity.CamoCreeperEntity;
 import com.mrbysco.camocreepers.modifier.AddEntityToSameBiomesModifier;
 import com.mrbysco.camocreepers.modifier.RemoveCreeperModifier;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -33,7 +32,7 @@ public class CamoRegistry {
 					.sized(0.6F, 1.7F).clientTrackingRange(8)));
 
 	public static final RegistryObject<Item> CAMO_CREEPER_SPAWN_EGG = ITEMS.register("camo_creeper_spawn_egg", () ->
-			new ForgeSpawnEggItem(CAMO_CREEPER, 894731, 0, itemBuilder()));
+			new ForgeSpawnEggItem(CAMO_CREEPER, 894731, 0, (new Item.Properties())));
 
 	public static void entityAttributes() {
 		SpawnPlacements.register(CamoRegistry.CAMO_CREEPER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
@@ -45,8 +44,8 @@ public class CamoRegistry {
 
 	public static final RegistryObject<Codec<AddEntityToSameBiomesModifier>> ADD_ENTITY_TO_SAME_BIOMES = BIOME_MODIFIER_SERIALIZERS.register("add_entity_to_same_biomes", () ->
 			RecordCodecBuilder.create(builder -> builder.group(
-					Registry.ENTITY_TYPE.byNameCodec().fieldOf("originalType").forGetter(AddEntityToSameBiomesModifier::originalType),
-					Registry.ENTITY_TYPE.byNameCodec().fieldOf("newType").forGetter(AddEntityToSameBiomesModifier::newType),
+					BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("originalType").forGetter(AddEntityToSameBiomesModifier::originalType),
+					BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("newType").forGetter(AddEntityToSameBiomesModifier::newType),
 					Codec.INT.fieldOf("weight").forGetter(AddEntityToSameBiomesModifier::weight),
 					Codec.INT.fieldOf("minGroup").forGetter(AddEntityToSameBiomesModifier::minGroup),
 					Codec.INT.fieldOf("maxGroup").forGetter(AddEntityToSameBiomesModifier::maxGroup)
@@ -56,9 +55,5 @@ public class CamoRegistry {
 
 	public static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> builder) {
 		return builder.build(id);
-	}
-
-	private static Item.Properties itemBuilder() {
-		return new Item.Properties().tab(CreativeModeTab.TAB_MISC);
 	}
 }
