@@ -11,7 +11,6 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,18 +29,14 @@ public class CamoCreepers {
 		CamoRegistry.ENTITY_TYPES.register(eventBus);
 		CamoRegistry.BIOME_MODIFIER_SERIALIZERS.register(eventBus);
 
+		eventBus.addListener(CamoRegistry::registerSpawnPlacements);
 		eventBus.addListener(CamoRegistry::registerEntityAttributes);
 
-		eventBus.addListener(this::setup);
 		eventBus.addListener(this::addTabContents);
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			eventBus.addListener(ClientHandler::registerEntityRenders);
 		});
-	}
-
-	private void setup(final FMLCommonSetupEvent event) {
-		CamoRegistry.entityAttributes();
 	}
 
 	private void addTabContents(final CreativeModeTabEvent.BuildContents event) {
