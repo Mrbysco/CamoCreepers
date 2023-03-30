@@ -17,6 +17,7 @@ import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.RegistryOps;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.flag.FeatureFlags;
@@ -26,8 +27,8 @@ import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.data.JsonCodecProvider;
 import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,10 +36,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -51,22 +52,25 @@ public class CamoDatagen {
 		PackOutput packOutput = generator.getPackOutput();
 		ExistingFileHelper helper = event.getExistingFileHelper();
 
-
-		Map<ResourceLocation, BiomeModifier> biomeModifiers = new LinkedHashMap<>();
-		biomeModifiers.put(new ResourceLocation(CamoCreepers.MOD_ID, "add_camo_creeper"), new AddEntityToSameBiomesModifier(
-				EntityType.CREEPER, CamoRegistry.CAMO_CREEPER.get(), 100, 4, 4));
-		biomeModifiers.put(new ResourceLocation(CamoCreepers.MOD_ID, "remove_creeper"), new RemoveCreeperModifier());
-
-		generator.addProvider(event.includeServer(), JsonCodecProvider.forDatapackRegistry(
-				packOutput, helper, CamoCreepers.MOD_ID, ops, ForgeRegistries.Keys.BIOME_MODIFIERS, biomeModifiers
-		));
+		generator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(
+				packOutput, CompletableFuture.supplyAsync(CamoDatagen::getProvider), Set.of(CamoCreepers.MOD_ID)));
 
 		generator.addProvider(event.includeServer(), new CreeperLoot(packOutput));
 	}
 
+	public static final ResourceKey<BiomeModifier> ADD_CAMO_CREEPER = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS,
+			new ResourceLocation(CamoCreepers.MOD_ID, "add_camo_creeper"));
+	public static final ResourceKey<BiomeModifier> REMOVE_CREEPER = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS,
+			new ResourceLocation(CamoCreepers.MOD_ID, "remove_creeper"));
+
 	private static HolderLookup.Provider getProvider() {
 		final RegistrySetBuilder registryBuilder = new RegistrySetBuilder();
 		// We need the BIOME registry to be present so we can use a biome tag, doesn't matter that it's empty
+		registryBuilder.add(ForgeRegistries.Keys.BIOME_MODIFIERS, context -> {
+			context.register(ADD_CAMO_CREEPER, new AddEntityToSameBiomesModifier(
+					EntityType.CREEPER, CamoRegistry.CAMO_CREEPER.get(), 100, 4, 4));
+			context.register(REMOVE_CREEPER, new RemoveCreeperModifier());
+		});
 		registryBuilder.add(Registries.BIOME, $ -> {
 		});
 		RegistryAccess.Frozen regAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
