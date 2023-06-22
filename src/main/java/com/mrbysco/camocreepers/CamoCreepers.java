@@ -5,7 +5,7 @@ import com.mrbysco.camocreepers.config.CamoConfig;
 import com.mrbysco.camocreepers.registry.CamoRegistry;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -39,8 +39,8 @@ public class CamoCreepers {
 		});
 	}
 
-	private void addTabContents(final CreativeModeTabEvent.BuildContents event) {
-		if (event.getTab() == CreativeModeTabs.SPAWN_EGGS) {
+	private void addTabContents(final BuildCreativeModeTabContentsEvent event) {
+		if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
 			event.accept(CamoRegistry.CAMO_CREEPER_SPAWN_EGG);
 		}
 	}

@@ -1,7 +1,5 @@
 package com.mrbysco.camocreepers.datagen;
 
-import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
 import com.mrbysco.camocreepers.CamoCreepers;
 import com.mrbysco.camocreepers.modifier.AddEntityToSameBiomesModifier;
 import com.mrbysco.camocreepers.modifier.RemoveCreeperModifier;
@@ -16,7 +14,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.registries.VanillaRegistries;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -28,7 +25,6 @@ import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -46,11 +42,8 @@ import java.util.stream.Stream;
 public class CamoDatagen {
 	@SubscribeEvent
 	public static void gatherData(GatherDataEvent event) {
-		HolderLookup.Provider provider = getProvider();
-		final RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
 		DataGenerator generator = event.getGenerator();
 		PackOutput packOutput = generator.getPackOutput();
-		ExistingFileHelper helper = event.getExistingFileHelper();
 
 		generator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(
 				packOutput, CompletableFuture.supplyAsync(CamoDatagen::getProvider), Set.of(CamoCreepers.MOD_ID)));
@@ -104,8 +97,7 @@ public class CamoDatagen {
 
 		@Override
 		protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationContext) {
-			// Don't validate as you reference another loottable
-//			map.forEach((name, table) -> LootTables.validate(validationContext, name, table));
+			// Don't validate as we reference another loottable
 		}
 	}
 }

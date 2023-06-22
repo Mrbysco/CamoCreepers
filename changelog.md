@@ -1,1 +1,1 @@
-* Fix mcmeta pack format
+* Initial update to 1.20

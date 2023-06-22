@@ -13,12 +13,15 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraftforge.common.Tags;
+
+import java.util.Optional;
 
 public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
 	private final ResourceLocation overlayLocation;
@@ -40,11 +43,12 @@ public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T
 			final Level level = camoCreeper.getCommandSenderWorld();
 			final BlockPos pos = camoCreeper.blockPosition();
 			final Holder<Biome> biome = level.getBiome(pos);
-			final ResourceLocation location = biome.unwrapKey().get().location();
+			final Optional<ResourceKey<Biome>> optionalBiomeResourceKey = biome.unwrapKey();
 			int baseColor = BiomeColors.getAverageGrassColor(level, pos);
 			int color;
 			if (level != null && pos != null) {
-				if (CamoConfig.COMMON.netherCamo.get() && biome.is(BiomeTags.IS_NETHER)) {
+				if (optionalBiomeResourceKey.isPresent() && CamoConfig.COMMON.netherCamo.get() && biome.is(BiomeTags.IS_NETHER)) {
+					final ResourceLocation location = optionalBiomeResourceKey.get().location();
 					if (location != null && location.equals(Biomes.BASALT_DELTAS.location())) {
 						color = 6052956;
 					} else {
