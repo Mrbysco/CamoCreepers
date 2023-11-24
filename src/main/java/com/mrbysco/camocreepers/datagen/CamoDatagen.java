@@ -24,18 +24,18 @@ import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
-import net.minecraftforge.common.world.BiomeModifier;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import net.neoforged.neoforge.common.world.BiomeModifier;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -51,15 +51,15 @@ public class CamoDatagen {
 		generator.addProvider(event.includeServer(), new CreeperLoot(packOutput));
 	}
 
-	public static final ResourceKey<BiomeModifier> ADD_CAMO_CREEPER = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS,
+	public static final ResourceKey<BiomeModifier> ADD_CAMO_CREEPER = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
 			new ResourceLocation(CamoCreepers.MOD_ID, "add_camo_creeper"));
-	public static final ResourceKey<BiomeModifier> REMOVE_CREEPER = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS,
+	public static final ResourceKey<BiomeModifier> REMOVE_CREEPER = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
 			new ResourceLocation(CamoCreepers.MOD_ID, "remove_creeper"));
 
 	private static HolderLookup.Provider getProvider() {
 		final RegistrySetBuilder registryBuilder = new RegistrySetBuilder();
 		// We need the BIOME registry to be present so we can use a biome tag, doesn't matter that it's empty
-		registryBuilder.add(ForgeRegistries.Keys.BIOME_MODIFIERS, context -> {
+		registryBuilder.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, context -> {
 			context.register(ADD_CAMO_CREEPER, new AddEntityToSameBiomesModifier(
 					EntityType.CREEPER, CamoRegistry.CAMO_CREEPER.get(), 100, 4, 4));
 			context.register(REMOVE_CREEPER, new RemoveCreeperModifier());
@@ -91,7 +91,7 @@ public class CamoDatagen {
 
 			@Override
 			protected Stream<EntityType<?>> getKnownEntityTypes() {
-				return CamoRegistry.ENTITY_TYPES.getEntries().stream().map(RegistryObject::get);
+				return CamoRegistry.ENTITY_TYPES.getEntries().stream().map(Supplier::get);
 			}
 		}
 

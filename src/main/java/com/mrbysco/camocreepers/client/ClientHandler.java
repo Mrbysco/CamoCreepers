@@ -2,7 +2,7 @@ package com.mrbysco.camocreepers.client;
 
 import com.mrbysco.camocreepers.client.renderer.CamoCreeperRenderer;
 import com.mrbysco.camocreepers.registry.CamoRegistry;
-import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 public class ClientHandler {
 	public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
