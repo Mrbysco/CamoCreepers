@@ -4,7 +4,7 @@ import com.mrbysco.camocreepers.CamoCreepers;
 import com.mrbysco.camocreepers.modifier.AddEntityToSameBiomesModifier;
 import com.mrbysco.camocreepers.modifier.RemoveCreeperModifier;
 import com.mrbysco.camocreepers.registry.CamoRegistry;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Cloner;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -56,9 +56,9 @@ public class CamoDatagen {
 	public static final ResourceKey<BiomeModifier> REMOVE_CREEPER = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
 			new ResourceLocation(CamoCreepers.MOD_ID, "remove_creeper"));
 
-	private static HolderLookup.Provider getProvider() {
+	private static RegistrySetBuilder.PatchedRegistries getProvider() {
 		final RegistrySetBuilder registryBuilder = new RegistrySetBuilder();
-		// We need the BIOME registry to be present so we can use a biome tag, doesn't matter that it's empty
+		// We need the BIOME registry to be present, so we can use a biome tag, doesn't matter that it's empty
 		registryBuilder.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, context -> {
 			context.register(ADD_CAMO_CREEPER, new AddEntityToSameBiomesModifier(
 					EntityType.CREEPER, CamoRegistry.CAMO_CREEPER.get(), 100, 4, 4));
@@ -67,7 +67,9 @@ public class CamoDatagen {
 		registryBuilder.add(Registries.BIOME, $ -> {
 		});
 		RegistryAccess.Frozen regAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
-		return registryBuilder.buildPatch(regAccess, VanillaRegistries.createLookup());
+		Cloner.Factory cloner$factory = new Cloner.Factory();
+		net.neoforged.neoforge.registries.DataPackRegistriesHooks.getDataPackRegistriesWithDimensions().forEach(data -> data.runWithArguments(cloner$factory::addCodec));
+		return registryBuilder.buildPatch(regAccess, VanillaRegistries.createLookup(), cloner$factory);
 	}
 
 	private static class CreeperLoot extends LootTableProvider {

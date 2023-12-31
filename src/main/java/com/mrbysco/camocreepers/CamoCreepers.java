@@ -6,11 +6,9 @@ import com.mrbysco.camocreepers.registry.CamoRegistry;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.DistExecutor;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.apache.logging.log4j.LogManager;
@@ -21,8 +19,7 @@ public class CamoCreepers {
 	public static final String MOD_ID = "camocreepers";
 	public static final Logger LOGGER = LogManager.getLogger();
 
-	public CamoCreepers() {
-		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+	public CamoCreepers(IEventBus eventBus) {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CamoConfig.commonSpec);
 		eventBus.register(CamoConfig.class);
 

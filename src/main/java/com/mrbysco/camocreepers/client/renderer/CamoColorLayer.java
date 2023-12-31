@@ -42,25 +42,25 @@ public class CamoColorLayer<T extends CamoCreeperEntity, M extends EntityModel<T
 
 			final Level level = camoCreeper.getCommandSenderWorld();
 			final BlockPos pos = camoCreeper.blockPosition();
-			final Holder<Biome> biome = level.getBiome(pos);
-			final Optional<ResourceKey<Biome>> optionalBiomeResourceKey = biome.unwrapKey();
+			final Holder<Biome> biomeHolder = level.getBiome(pos);
+			final Optional<ResourceKey<Biome>> optionalBiomeResourceKey = biomeHolder.unwrapKey();
 			int baseColor = BiomeColors.getAverageGrassColor(level, pos);
 			int color;
 			if (level != null && pos != null) {
-				if (optionalBiomeResourceKey.isPresent() && CamoConfig.COMMON.netherCamo.get() && biome.is(BiomeTags.IS_NETHER)) {
+				if (optionalBiomeResourceKey.isPresent() && CamoConfig.COMMON.netherCamo.get() && biomeHolder.is(BiomeTags.IS_NETHER)) {
 					final ResourceLocation location = optionalBiomeResourceKey.get().location();
 					if (location != null && location.equals(Biomes.BASALT_DELTAS.location())) {
 						color = 6052956;
 					} else {
 						color = 8733250;
 					}
-				} else if (CamoConfig.COMMON.endCamo.get() && biome.is(BiomeTags.IS_END)) {
+				} else if (CamoConfig.COMMON.endCamo.get() && biomeHolder.is(BiomeTags.IS_END)) {
 					color = 15660724;
-				} else if (biome.is(Tags.Biomes.IS_MUSHROOM)) {
+				} else if (biomeHolder.is(Tags.Biomes.IS_MUSHROOM)) {
 					color = 9138547;
 				} else if (CamoConfig.COMMON.caveCamo.get() && pos.getY() < level.getSeaLevel() && !level.canSeeSky(pos)) {
 					color = 7631988;
-				} else if (biome.is(Tags.Biomes.IS_SANDY) || biome.is(BiomeTags.IS_BEACH)) {
+				} else if (biomeHolder.is(Tags.Biomes.IS_SANDY) || biomeHolder.is(BiomeTags.IS_BEACH)) {
 					color = 14009494;
 				} else {
 					color = baseColor;
