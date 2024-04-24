@@ -1,6 +1,7 @@
 package com.mrbysco.camocreepers.registry;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mrbysco.camocreepers.CamoCreepers;
 import com.mrbysco.camocreepers.entity.CamoCreeperEntity;
@@ -11,7 +12,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -29,7 +30,7 @@ import java.util.function.Supplier;
 public class CamoRegistry {
 	public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(CamoCreepers.MOD_ID);
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, CamoCreepers.MOD_ID);
-	public static final DeferredRegister<Codec<? extends BiomeModifier>> BIOME_MODIFIER_SERIALIZERS = DeferredRegister.create(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, CamoCreepers.MOD_ID);
+	public static final DeferredRegister<MapCodec<? extends BiomeModifier>> BIOME_MODIFIER_SERIALIZERS = DeferredRegister.create(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, CamoCreepers.MOD_ID);
 
 
 	public static final DeferredHolder<EntityType<?>, EntityType<CamoCreeperEntity>> CAMO_CREEPER = ENTITY_TYPES.register("camo_creeper", () ->
@@ -40,15 +41,15 @@ public class CamoRegistry {
 			new DeferredSpawnEggItem(CAMO_CREEPER, 894731, 0, (new Item.Properties())));
 
 	public static void registerEntityAttributes(SpawnPlacementRegisterEvent event) {
-		event.register(CamoRegistry.CAMO_CREEPER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
+		event.register(CamoRegistry.CAMO_CREEPER.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
 	}
 
 	public static void registerSpawnPlacements(EntityAttributeCreationEvent event) {
 		event.put(CAMO_CREEPER.get(), CamoCreeperEntity.createAttributes().build());
 	}
 
-	public static final Supplier<Codec<AddEntityToSameBiomesModifier>> ADD_ENTITY_TO_SAME_BIOMES = BIOME_MODIFIER_SERIALIZERS.register("add_entity_to_same_biomes", () ->
-			RecordCodecBuilder.create(builder -> builder.group(
+	public static final Supplier<MapCodec<AddEntityToSameBiomesModifier>> ADD_ENTITY_TO_SAME_BIOMES = BIOME_MODIFIER_SERIALIZERS.register("add_entity_to_same_biomes", () ->
+			RecordCodecBuilder.mapCodec(builder -> builder.group(
 					BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("originalType").forGetter(AddEntityToSameBiomesModifier::originalType),
 					BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("newType").forGetter(AddEntityToSameBiomesModifier::newType),
 					Codec.INT.fieldOf("weight").forGetter(AddEntityToSameBiomesModifier::weight),
@@ -56,7 +57,7 @@ public class CamoRegistry {
 					Codec.INT.fieldOf("maxGroup").forGetter(AddEntityToSameBiomesModifier::maxGroup)
 			).apply(builder, AddEntityToSameBiomesModifier::new))
 	);
-	public static final Supplier<Codec<RemoveCreeperModifier>> REMOVE_CREEPER = BIOME_MODIFIER_SERIALIZERS.register("remove_creeper", RemoveCreeperModifier.CODEC);
+	public static final Supplier<MapCodec<RemoveCreeperModifier>> REMOVE_CREEPER = BIOME_MODIFIER_SERIALIZERS.register("remove_creeper", RemoveCreeperModifier.CODEC);
 
 	public static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> builder) {
 		return builder.build(id);

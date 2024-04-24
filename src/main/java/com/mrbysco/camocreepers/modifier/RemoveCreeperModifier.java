@@ -2,7 +2,7 @@ package com.mrbysco.camocreepers.modifier;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mrbysco.camocreepers.config.CamoConfig;
 import com.mrbysco.camocreepers.registry.CamoRegistry;
 import net.minecraft.core.Holder;
@@ -17,7 +17,7 @@ import net.neoforged.neoforge.common.world.ModifiableBiomeInfo.BiomeInfo.Builder
 import java.util.List;
 
 public class RemoveCreeperModifier implements BiomeModifier {
-	public static final Supplier<Codec<RemoveCreeperModifier>> CODEC = Suppliers.memoize(() -> Codec.unit(() -> RemoveCreeperModifier.INSTANCE));
+	public static final Supplier<MapCodec<RemoveCreeperModifier>> CODEC = Suppliers.memoize(() -> MapCodec.unit(() -> RemoveCreeperModifier.INSTANCE));
 	public static final RemoveCreeperModifier INSTANCE = new RemoveCreeperModifier();
 
 	@Override
@@ -32,7 +32,7 @@ public class RemoveCreeperModifier implements BiomeModifier {
 	}
 
 	@Override
-	public Codec<? extends BiomeModifier> codec() {
+	public MapCodec<? extends BiomeModifier> codec() {
 		return CamoRegistry.REMOVE_CREEPER.get();
 	}
 }

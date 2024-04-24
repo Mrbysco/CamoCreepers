@@ -1,6 +1,6 @@
 package com.mrbysco.camocreepers.modifier;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mrbysco.camocreepers.registry.CamoRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EntityType;
@@ -31,7 +31,7 @@ public record AddEntityToSameBiomesModifier(EntityType<?> originalType, EntityTy
 	}
 
 	@Override
-	public Codec<? extends BiomeModifier> codec() {
+	public MapCodec<? extends BiomeModifier> codec() {
 		return CamoRegistry.ADD_ENTITY_TO_SAME_BIOMES.get();
 	}
 }
