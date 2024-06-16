@@ -17,6 +17,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -69,11 +70,8 @@ public class CamoColorLayer<T extends CamoCreeper, M extends EntityModel<T>> ext
 				color = baseColor;
 			}
 
-			final float r = (float) (color >> 16 & 255) / 255.0F;
-			final float g = (float) (color >> 8 & 255) / 255.0F;
-			final float b = (float) (color & 255) / 255.0F;
-
-			entityModel.renderToBuffer(poseStack, vertexConsumer, packedLightIn, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
+			entityModel.renderToBuffer(poseStack, vertexConsumer, packedLightIn, OverlayTexture.NO_OVERLAY,
+					FastColor.ARGB32.multiply(-1, color));
 		}
 	}
 }

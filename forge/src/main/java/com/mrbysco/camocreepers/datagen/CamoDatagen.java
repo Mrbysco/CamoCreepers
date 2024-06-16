@@ -6,6 +6,7 @@ import com.mrbysco.camocreepers.datagen.server.CamoLootProvider;
 import com.mrbysco.camocreepers.modifier.AddEntityToSameBiomesModifier;
 import com.mrbysco.camocreepers.modifier.RemoveCreeperModifier;
 import com.mrbysco.camocreepers.registration.CamoRegistry;
+import net.minecraft.core.Cloner;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistrySetBuilder;
@@ -17,18 +18,18 @@ import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.world.BiomeModifier;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.world.BiomeModifier;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class CamoDatagen {
 	@SubscribeEvent
 	public static void gatherData(GatherDataEvent event) {
@@ -40,26 +41,28 @@ public class CamoDatagen {
 		generator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(
 				packOutput, CompletableFuture.supplyAsync(CamoDatagen::getProvider), Set.of(Constants.MOD_ID)));
 
-		generator.addProvider(event.includeServer(), new CamoLootProvider(packOutput));
+		generator.addProvider(event.includeServer(), new CamoLootProvider(packOutput, lookupProvider));
 		generator.addProvider(event.includeServer(), new CamoBiomeTagProvider(packOutput, lookupProvider, helper));
 	}
 
-	public static final ResourceKey<BiomeModifier> ADD_CAMO_CREEPER = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS,
-			new ResourceLocation(Constants.MOD_ID, "add_camo_creeper"));
-	public static final ResourceKey<BiomeModifier> REMOVE_CREEPER = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS,
-			new ResourceLocation(Constants.MOD_ID, "remove_creeper"));
+	public static final ResourceKey<BiomeModifier> ADD_CAMO_CREEPER = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
+			ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "add_camo_creeper"));
+	public static final ResourceKey<BiomeModifier> REMOVE_CREEPER = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
+			ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "remove_creeper"));
 
-	private static HolderLookup.Provider getProvider() {
+	private static RegistrySetBuilder.PatchedRegistries getProvider() {
 		final RegistrySetBuilder registryBuilder = new RegistrySetBuilder();
 		// We need the BIOME registry to be present so we can use a biome tag, doesn't matter that it's empty
-		registryBuilder.add(ForgeRegistries.Keys.BIOME_MODIFIERS, context -> {
+		registryBuilder.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, context -> {
 			context.register(ADD_CAMO_CREEPER, new AddEntityToSameBiomesModifier(
 					EntityType.CREEPER, CamoRegistry.CAMO_CREEPER.get(), 100, 4, 4));
 			context.register(REMOVE_CREEPER, new RemoveCreeperModifier());
 		});
-		registryBuilder.add(Registries.BIOME, $ -> {
+		registryBuilder.add(Registries.BIOME, context -> {
 		});
 		RegistryAccess.Frozen regAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
-		return registryBuilder.buildPatch(regAccess, VanillaRegistries.createLookup());
+		Cloner.Factory cloner$factory = new Cloner.Factory();
+		net.neoforged.neoforge.registries.DataPackRegistriesHooks.getDataPackRegistriesWithDimensions().forEach(p_311524_ -> p_311524_.runWithArguments(cloner$factory::addCodec));
+		return registryBuilder.buildPatch(regAccess, VanillaRegistries.createLookup(), cloner$factory);
 	}
 }

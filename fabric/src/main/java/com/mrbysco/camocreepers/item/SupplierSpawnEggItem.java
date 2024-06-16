@@ -1,11 +1,10 @@
 package com.mrbysco.camocreepers.item;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +26,8 @@ public class SupplierSpawnEggItem<T extends Mob> extends SpawnEggItem {
 	}
 
 	@Override
-	public EntityType<?> getType(@Nullable CompoundTag compoundTag) {
-		return typeSupplier.get();
+	public EntityType<?> getType(ItemStack itemStack) {
+		return this.typeSupplier.get();
 	}
 
 	@Override

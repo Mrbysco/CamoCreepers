@@ -6,11 +6,12 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.level.Level;
 
 public class CamoCreeper extends Creeper {
-	public CamoCreeper(EntityType<? extends Creeper> type, Level worldIn) {
-		super(type, worldIn);
+	public CamoCreeper(EntityType<? extends Creeper> type, Level level) {
+		super(type, level);
 	}
 
-	public CamoCreeper(Level worldIn) {
-		super(CamoRegistry.CAMO_CREEPER.get(), worldIn);
+	@Override
+	public EntityType<?> getType() {
+		return CamoRegistry.CAMO_CREEPER.get();
 	}
 }
