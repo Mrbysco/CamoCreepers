@@ -1,0 +1,11 @@
+{
+  "item.camocreepers.camo_creeper_spawn_egg": "Camo Creeper Spawn Egg",
+  "entity.camocreepers.camo_creeper": "Camo Creeper",
+  "text.autoconfig.camocreepers.title": "Camo Creepers",
+  "text.autoconfig.camocreepers.option.general": "General",
+  "text.autoconfig.camocreepers.option.general.overrideCreeperSpawns": "Override Creeper Spawns",
+  "text.autoconfig.camocreepers.option.settings": "Settings",
+  "text.autoconfig.camocreepers.option.settings.netherCamo": "Nether Camo",
+  "text.autoconfig.camocreepers.option.settings.endCamo": "End Camo",
+  "text.autoconfig.camocreepers.option.settings.caveCamo": "Cave Camo"
+}

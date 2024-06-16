@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "camocreepers",
+  "version": "${version}",
+  "name": "Camo Creepers",
+  "description": "Creepers that blend in more with the environment",
+  "authors": [
+    "Mrbysco"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/camo-creepers",
+    "sources": "https://github.com/Mrbysco/CamoCreepers",
+    "issues": "https://github.com/Mrbysco/CamoCreepers/issues"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.mrbysco.camocreepers.CamoCreepersFabric"
+    ],
+    "client": [
+      "com.mrbysco.camocreepers.CamoCreepersFabricClient"
+    ],
+    "modmenu": [
+      "com.mrbysco.camocreepers.config.CamoMenuIntegration"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14",
+    "fabric": "*",
+    "minecraft": "~1.20",
+    "java": ">=17",
+    "cloth-config": ">=11"
+  }
+}
+
