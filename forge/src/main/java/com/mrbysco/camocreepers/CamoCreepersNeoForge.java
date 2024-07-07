@@ -16,7 +16,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
-import net.neoforged.neoforge.event.entity.SpawnPlacementRegisterEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 
 @Mod(Constants.MOD_ID)
 public class CamoCreepersNeoForge {
@@ -45,8 +45,8 @@ public class CamoCreepersNeoForge {
 		}
 	}
 
-	public static void registerEntityAttributes(SpawnPlacementRegisterEvent event) {
-		event.register(CamoRegistry.CAMO_CREEPER.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
+	public static void registerEntityAttributes(RegisterSpawnPlacementsEvent event) {
+		event.register(CamoRegistry.CAMO_CREEPER.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.AND);
 	}
 
 	public static void registerSpawnPlacements(EntityAttributeCreationEvent event) {
