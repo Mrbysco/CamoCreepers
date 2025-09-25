@@ -1,6 +1,8 @@
 package com.mrbysco.camocreepers.datagen;
 
 import com.mrbysco.camocreepers.Constants;
+import com.mrbysco.camocreepers.datagen.client.CamoLanguageProvider;
+import com.mrbysco.camocreepers.datagen.client.CamoModelProvider;
 import com.mrbysco.camocreepers.datagen.server.CamoBiomeTagProvider;
 import com.mrbysco.camocreepers.datagen.server.CamoLootProvider;
 import com.mrbysco.camocreepers.modifier.AddEntityToSameBiomesModifier;
@@ -21,7 +23,6 @@ import net.minecraft.world.entity.EntityType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -32,17 +33,19 @@ import java.util.concurrent.CompletableFuture;
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class CamoDatagen {
 	@SubscribeEvent
-	public static void gatherData(GatherDataEvent event) {
+	public static void gatherData(GatherDataEvent.Client event) {
 		DataGenerator generator = event.getGenerator();
 		PackOutput packOutput = generator.getPackOutput();
 		CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
-		ExistingFileHelper helper = event.getExistingFileHelper();
 
-		generator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(
+		generator.addProvider(true, new DatapackBuiltinEntriesProvider(
 				packOutput, CompletableFuture.supplyAsync(CamoDatagen::getProvider), Set.of(Constants.MOD_ID)));
 
-		generator.addProvider(event.includeServer(), new CamoLootProvider(packOutput, lookupProvider));
-		generator.addProvider(event.includeServer(), new CamoBiomeTagProvider(packOutput, lookupProvider, helper));
+		generator.addProvider(true, new CamoLootProvider(packOutput, lookupProvider));
+		generator.addProvider(true, new CamoBiomeTagProvider(packOutput, lookupProvider));
+
+		generator.addProvider(true, new CamoLanguageProvider(packOutput));
+		generator.addProvider(true, new CamoModelProvider(packOutput));
 	}
 
 	public static final ResourceKey<BiomeModifier> ADD_CAMO_CREEPER = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,

@@ -5,16 +5,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
 public class CamoBiomeTagProvider extends BiomeTagsProvider {
 
-	public CamoBiomeTagProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider,
-	                            @Nullable ExistingFileHelper existingFileHelper) {
-		super(packOutput, lookupProvider, Constants.MOD_ID, existingFileHelper);
+	public CamoBiomeTagProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+		super(packOutput, lookupProvider, Constants.MOD_ID);
 	}
 
 	@Override

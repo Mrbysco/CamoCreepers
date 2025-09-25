@@ -38,7 +38,7 @@ public class CamoLootProvider extends LootTableProvider {
 		public void generate() {
 			this.add(CamoRegistry.CAMO_CREEPER.get(), LootTable.lootTable()
 					.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-							.add(NestedLootTable.lootTableReference(EntityType.CREEPER.getDefaultLootTable()))));
+							.add(NestedLootTable.lootTableReference(EntityType.CREEPER.getDefaultLootTable().get()))));
 		}
 
 		@Override

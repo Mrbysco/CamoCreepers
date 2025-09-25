@@ -14,13 +14,13 @@ Creepers that blend in more with the environment
 '''
 [[dependencies.camocreepers]]
 modId="minecraft"
-mandatory=true
-versionRange="[1.21,1.22)"
+type="required"
+versionRange="[1.21.4,1.22)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.camocreepers]]
 modId="neoforge"
 type="required"
-versionRange="[21.0.75-beta,)"
+versionRange="[21.4.0-beta,)"
 ordering="NONE"
 side="BOTH"

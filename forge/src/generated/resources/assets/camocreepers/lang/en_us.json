@@ -1,0 +1,16 @@
+{
+  "camocreepers.configuration.Camo": "Camo",
+  "camocreepers.configuration.Camo.tooltip": "Camo settings",
+  "camocreepers.configuration.General": "General",
+  "camocreepers.configuration.General.tooltip": "General settings",
+  "camocreepers.configuration.caveCamo": "Cave Camo",
+  "camocreepers.configuration.caveCamo.tooltip": "Allow Camo Creepers to camouflage in caves",
+  "camocreepers.configuration.endCamo": "End Camo",
+  "camocreepers.configuration.endCamo.tooltip": "Allow Camo Creepers to camouflage in the End",
+  "camocreepers.configuration.netherCamo": "Nether Camo",
+  "camocreepers.configuration.netherCamo.tooltip": "Allow Camo Creepers to camouflage in the Nether",
+  "camocreepers.configuration.overrideCreeperSpawns": "Override Creeper Spawns",
+  "camocreepers.configuration.overrideCreeperSpawns.tooltip": "Override vanilla creeper spawns with the Camo Creepers",
+  "entity.camocreepers.camo_creeper": "Camo Creeper",
+  "item.camocreepers.camo_creeper_spawn_egg": "Camo Creeper Spawn Egg"
+}

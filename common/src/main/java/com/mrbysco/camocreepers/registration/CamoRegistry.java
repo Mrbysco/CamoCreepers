@@ -2,12 +2,15 @@ package com.mrbysco.camocreepers.registration;
 
 import com.mrbysco.camocreepers.Constants;
 import com.mrbysco.camocreepers.entity.CamoCreeper;
-import com.mrbysco.camocreepers.platform.Services;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
 
 /**
  * This class is used to register entities and items.
@@ -22,11 +25,19 @@ public class CamoRegistry {
 					.sized(0.6F, 1.7F).clientTrackingRange(8)));
 
 	public static final RegistryObject<Item> CAMO_CREEPER_SPAWN_EGG = ITEMS.register("camo_creeper_spawn_egg", () ->
-			Services.PLATFORM.buildSpawnEgg(CAMO_CREEPER, 894731, 0, (new Item.Properties())));
+			new SpawnEggItem(CAMO_CREEPER.get(), (new Item.Properties().setId(getItemKey("camo_creeper_spawn_egg")))));
 
+
+	private static ResourceKey<Item> getItemKey(String name) {
+		return ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name));
+	}
 
 	public static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> builder) {
-		return builder.build(id);
+		return builder.build(getEntityKey(id));
+	}
+
+	private static ResourceKey<EntityType<?>> getEntityKey(String name) {
+		return ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name));
 	}
 
 	// Called in the mod initializer / constructor in order to make sure that items are registered

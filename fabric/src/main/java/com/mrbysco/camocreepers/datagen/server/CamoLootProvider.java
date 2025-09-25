@@ -23,8 +23,8 @@ public class CamoLootProvider extends SimpleFabricLootTableProvider {
 
 	@Override
 	public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
-		biConsumer.accept(CamoRegistry.CAMO_CREEPER.get().getDefaultLootTable(), LootTable.lootTable()
+		biConsumer.accept(CamoRegistry.CAMO_CREEPER.get().getDefaultLootTable().get(), LootTable.lootTable()
 				.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-						.add(NestedLootTable.lootTableReference(EntityType.CREEPER.getDefaultLootTable()))));
+						.add(NestedLootTable.lootTableReference(EntityType.CREEPER.getDefaultLootTable().get()))));
 	}
 }

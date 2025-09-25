@@ -3,75 +3,65 @@ package com.mrbysco.camocreepers.client.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mrbysco.camocreepers.Constants;
-import com.mrbysco.camocreepers.entity.CamoCreeper;
 import com.mrbysco.camocreepers.platform.Services;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.model.CreeperModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.entity.state.CreeperRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
-import net.minecraft.util.FastColor;
-import net.minecraft.world.level.Level;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 
 import java.util.Optional;
 
-public class CamoColorLayer<T extends CamoCreeper, M extends EntityModel<T>> extends RenderLayer<T, M> {
+public class CamoColorLayer extends RenderLayer<CreeperRenderState, CreeperModel> {
 	private final ResourceLocation overlayLocation;
 
-	public CamoColorLayer(RenderLayerParent<T, M> entityRendererIn, ResourceLocation overlay) {
+	public CamoColorLayer(RenderLayerParent<CreeperRenderState, CreeperModel> entityRendererIn, ResourceLocation overlay) {
 		super(entityRendererIn);
 		this.overlayLocation = overlay;
 	}
 
 	@Override
-	public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLightIn, T camoCreeper, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-		if (!camoCreeper.isInvisible()) {
-			EntityModel<T> entityModel = this.getParentModel();
-			entityModel.prepareMobModel(camoCreeper, limbSwing, limbSwingAmount, partialTicks);
-			this.getParentModel().copyPropertiesTo(entityModel);
-			VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(this.overlayLocation));
-			entityModel.setupAnim(camoCreeper, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+	public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CreeperRenderState renderState, float yRot, float xRot) {
+		if (renderState instanceof CamoCreeperRenderState camoRenderState && !renderState.isInvisible) {
+			CreeperModel entityModel = this.getParentModel();
 
-			final Level level = camoCreeper.getCommandSenderWorld();
-			final BlockPos pos = camoCreeper.blockPosition();
-			final Holder<Biome> biome = level.getBiome(pos);
+			VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(this.overlayLocation));
+			entityModel.setupAnim(camoRenderState);
+
+			final Holder<Biome> biome = camoRenderState.biome;
 			final Optional<ResourceKey<Biome>> optionalBiomeResourceKey = biome.unwrapKey();
-			int baseColor = BiomeColors.getAverageGrassColor(level, pos);
+			int baseColor = camoRenderState.baseColor;
 			int color;
-			if (level != null && pos != null) {
-				if (optionalBiomeResourceKey.isPresent() && Services.PLATFORM.showNetherCamo() && biome.is(BiomeTags.IS_NETHER)) {
-					final ResourceLocation location = optionalBiomeResourceKey.get().location();
-					if (location != null && location.equals(Biomes.BASALT_DELTAS.location())) {
-						color = 6052956;
-					} else {
-						color = 8733250;
-					}
-				} else if (Services.PLATFORM.showEndCamo() && biome.is(BiomeTags.IS_END)) {
-					color = 15660724;
-				} else if (biome.is(Constants.IS_MUSHROOM)) {
-					color = 9138547;
-				} else if (Services.PLATFORM.showCaveCamo() && pos.getY() < level.getSeaLevel() && !level.canSeeSky(pos)) {
-					color = 7631988;
-				} else if (biome.is(Constants.IS_SANDY) || biome.is(BiomeTags.IS_BEACH)) {
-					color = 14009494;
+			if (optionalBiomeResourceKey.isPresent() && Services.PLATFORM.showNetherCamo() && biome.is(BiomeTags.IS_NETHER)) {
+				final ResourceLocation location = optionalBiomeResourceKey.get().location();
+				if (location != null && location.equals(Biomes.BASALT_DELTAS.location())) {
+					color = 6052956;
 				} else {
-					color = baseColor;
+					color = 8733250;
 				}
+			} else if (Services.PLATFORM.showEndCamo() && biome.is(BiomeTags.IS_END)) {
+				color = 15660724;
+			} else if (biome.is(Constants.IS_MUSHROOM)) {
+				color = 9138547;
+			} else if (Services.PLATFORM.showCaveCamo() && camoRenderState.y < camoRenderState.seaLevel && !camoRenderState.canSeeSky) {
+				color = 7631988;
+			} else if (biome.is(Constants.IS_SANDY) || biome.is(BiomeTags.IS_BEACH)) {
+				color = 14009494;
 			} else {
 				color = baseColor;
 			}
 
-			entityModel.renderToBuffer(poseStack, vertexConsumer, packedLightIn, OverlayTexture.NO_OVERLAY,
-					FastColor.ARGB32.multiply(-1, color));
+			entityModel.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY,
+					ARGB.multiply(-1, color));
 		}
 	}
 }
