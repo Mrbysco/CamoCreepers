@@ -19,7 +19,7 @@ public class CamoBiomeTagProvider extends FabricTagProvider<Biome> {
 
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
-		this.tag(Constants.IS_MUSHROOM).add(Biomes.MUSHROOM_FIELDS).addOptionalTag(ConventionalBiomeTags.IS_MUSHROOM.location());
-		this.tag(Constants.IS_SANDY).add(Biomes.DESERT, Biomes.BEACH, Biomes.BADLANDS, Biomes.WOODED_BADLANDS);
+		this.builder(Constants.IS_MUSHROOM).add(Biomes.MUSHROOM_FIELDS).addOptionalTag(ConventionalBiomeTags.IS_MUSHROOM);
+		this.builder(Constants.IS_SANDY).add(Biomes.DESERT, Biomes.BEACH, Biomes.BADLANDS, Biomes.WOODED_BADLANDS);
 	}
 }
