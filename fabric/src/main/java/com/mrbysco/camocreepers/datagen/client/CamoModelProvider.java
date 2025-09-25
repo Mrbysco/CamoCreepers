@@ -5,6 +5,9 @@ import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.model.ItemModelUtils;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
+import net.minecraft.world.item.Items;
 
 public class CamoModelProvider extends FabricModelProvider {
 	public CamoModelProvider(FabricDataOutput packOutput) {
@@ -18,6 +21,12 @@ public class CamoModelProvider extends FabricModelProvider {
 
 	@Override
 	public void generateItemModels(ItemModelGenerators itemModels) {
-		itemModels.generateSpawnEgg(CamoRegistry.CAMO_CREEPER_SPAWN_EGG.get(), 894731, 0);
+		itemModels.itemModelOutput.accept(CamoRegistry.CAMO_CREEPER_SPAWN_EGG.get(),
+				ItemModelUtils.plainModel(
+						ModelLocationUtils.getModelLocation(
+								Items.CREEPER_SPAWN_EGG
+						)
+				)
+		);
 	}
 }

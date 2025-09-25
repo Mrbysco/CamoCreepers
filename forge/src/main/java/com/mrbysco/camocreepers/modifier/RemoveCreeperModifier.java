@@ -6,6 +6,7 @@ import com.mojang.serialization.MapCodec;
 import com.mrbysco.camocreepers.config.CamoConfig;
 import com.mrbysco.camocreepers.registry.CamoModifiers;
 import net.minecraft.core.Holder;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
@@ -13,8 +14,6 @@ import net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.MobSpawnSettingsBuilder;
 import net.neoforged.neoforge.common.world.ModifiableBiomeInfo.BiomeInfo.Builder;
-
-import java.util.List;
 
 public class RemoveCreeperModifier implements BiomeModifier {
 	public static final Supplier<MapCodec<RemoveCreeperModifier>> CODEC = Suppliers.memoize(() -> MapCodec.unit(() -> RemoveCreeperModifier.INSTANCE));
@@ -25,8 +24,8 @@ public class RemoveCreeperModifier implements BiomeModifier {
 		if (phase == Phase.REMOVE && CamoConfig.COMMON.overrideCreeperSpawns.get()) {
 			MobSpawnSettingsBuilder spawnBuilder = builder.getMobSpawnSettings();
 			for (MobCategory category : MobCategory.values()) {
-				List<SpawnerData> spawns = spawnBuilder.getSpawner(category);
-				spawns.removeIf(spawnerData -> spawnerData.type == EntityType.CREEPER);
+				final WeightedList.Builder<SpawnerData> spawns = spawnBuilder.getSpawner(category);
+				spawns.removeIf(spawnerData -> spawnerData.value().type() == EntityType.CREEPER);
 			}
 		}
 	}
