@@ -18,7 +18,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -49,9 +49,9 @@ public class CamoDatagen {
 	}
 
 	public static final ResourceKey<BiomeModifier> ADD_CAMO_CREEPER = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-			ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "add_camo_creeper"));
+			Constants.modLoc("add_camo_creeper"));
 	public static final ResourceKey<BiomeModifier> REMOVE_CREEPER = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-			ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "remove_creeper"));
+			Constants.modLoc("remove_creeper"));
 
 	private static RegistrySetBuilder.PatchedRegistries getProvider() {
 		final RegistrySetBuilder registryBuilder = new RegistrySetBuilder();

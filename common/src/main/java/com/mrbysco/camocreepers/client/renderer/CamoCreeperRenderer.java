@@ -5,11 +5,11 @@ import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.entity.CreeperRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.CreeperRenderState;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.monster.Creeper;
 
 public class CamoCreeperRenderer extends CreeperRenderer {
-	private static final ResourceLocation CAMO_CREEPER_TEXTURES = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "textures/entity/camo_creeper.png");
+	private static final Identifier CAMO_CREEPER_TEXTURES = Constants.modLoc("textures/entity/camo_creeper.png");
 
 	public CamoCreeperRenderer(EntityRendererProvider.Context context) {
 		super(context);

@@ -1,19 +1,18 @@
 package com.mrbysco.camocreepers.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mrbysco.camocreepers.Constants;
 import com.mrbysco.camocreepers.platform.Services;
-import net.minecraft.client.model.CreeperModel;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.model.monster.creeper.CreeperModel;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.CreeperRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.level.biome.Biome;
@@ -22,19 +21,18 @@ import net.minecraft.world.level.biome.Biomes;
 import java.util.Optional;
 
 public class CamoColorLayer extends RenderLayer<CreeperRenderState, CreeperModel> {
-	private final ResourceLocation overlayLocation;
+	private final Identifier overlayLocation;
 
-	public CamoColorLayer(RenderLayerParent<CreeperRenderState, CreeperModel> entityRendererIn, ResourceLocation overlay) {
+	public CamoColorLayer(RenderLayerParent<CreeperRenderState, CreeperModel> entityRendererIn, Identifier overlay) {
 		super(entityRendererIn);
 		this.overlayLocation = overlay;
 	}
 
 	@Override
-	public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CreeperRenderState renderState, float yRot, float xRot) {
+	public void submit(PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, CreeperRenderState renderState, float yRot, float xRot) {
 		if (renderState instanceof CamoCreeperRenderState camoRenderState && !renderState.isInvisible) {
 			CreeperModel entityModel = this.getParentModel();
 
-			VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(this.overlayLocation));
 			entityModel.setupAnim(camoRenderState);
 
 			final Holder<Biome> biome = camoRenderState.biome;
@@ -42,8 +40,8 @@ public class CamoColorLayer extends RenderLayer<CreeperRenderState, CreeperModel
 			int baseColor = camoRenderState.baseColor;
 			int color;
 			if (optionalBiomeResourceKey.isPresent() && Services.PLATFORM.showNetherCamo() && biome.is(BiomeTags.IS_NETHER)) {
-				final ResourceLocation location = optionalBiomeResourceKey.get().location();
-				if (location != null && location.equals(Biomes.BASALT_DELTAS.location())) {
+				final Identifier location = optionalBiomeResourceKey.get().identifier();
+				if (location != null && location.equals(Biomes.BASALT_DELTAS.identifier())) {
 					color = 6052956;
 				} else {
 					color = 8733250;
@@ -60,8 +58,9 @@ public class CamoColorLayer extends RenderLayer<CreeperRenderState, CreeperModel
 				color = baseColor;
 			}
 
-			entityModel.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY,
-					ARGB.multiply(-1, color));
+			nodeCollector.order(1).submitModel(this.getParentModel(), renderState, poseStack,
+					RenderTypes.armorCutoutNoCull(this.overlayLocation), packedLight, OverlayTexture.NO_OVERLAY,
+					ARGB.multiply(-1, color), null, renderState.outlineColor, null);
 		}
 	}
 }
