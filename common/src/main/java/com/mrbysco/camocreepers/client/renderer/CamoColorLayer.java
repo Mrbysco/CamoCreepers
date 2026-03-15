@@ -14,9 +14,11 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.Optional;
 
@@ -54,8 +56,16 @@ public class CamoColorLayer extends RenderLayer<CreeperRenderState, CreeperModel
 				color = 7631988;
 			} else if (biome.is(Constants.IS_SANDY) || biome.is(BiomeTags.IS_BEACH)) {
 				color = 14009494;
-			} else {
+			} else if (camoRenderState.feetState.is(BlockTags.LEAVES)) {
+				color = camoRenderState.foliageColor;
+			} else if (camoRenderState.feetState.is(Blocks.GRASS_BLOCK)) {
 				color = baseColor;
+			} else {
+				if (camoRenderState.feetState.isSolid() && !camoRenderState.feetState.isAir()) {
+					color = camoRenderState.feetState.getBlock().defaultMapColor().col;
+				} else {
+					color = baseColor;
+				}
 			}
 
 			nodeCollector.order(1).submitModel(this.getParentModel(), renderState, poseStack,

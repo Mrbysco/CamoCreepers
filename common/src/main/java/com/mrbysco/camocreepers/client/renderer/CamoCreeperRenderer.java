@@ -25,8 +25,10 @@ public class CamoCreeperRenderer extends CreeperRenderer {
 	public void extractRenderState(Creeper creeper, CreeperRenderState renderState, float partialTick) {
 		super.extractRenderState(creeper, renderState, partialTick);
 		if (renderState instanceof CamoCreeperRenderState camoRenderState) {
+			camoRenderState.feetState = creeper.getBlockStateOn();
 			camoRenderState.biome = creeper.level().getBiome(creeper.blockPosition());
 			camoRenderState.baseColor = BiomeColors.getAverageGrassColor(creeper.level(), creeper.blockPosition());
+			camoRenderState.foliageColor = BiomeColors.getAverageFoliageColor(creeper.level(), creeper.blockPosition());
 			camoRenderState.seaLevel = creeper.level().getSeaLevel();
 			camoRenderState.canSeeSky = creeper.level().canSeeSky(creeper.blockPosition());
 		}
