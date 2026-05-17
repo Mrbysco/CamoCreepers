@@ -1,6 +1,7 @@
 package com.mrbysco.camocreepers.client.renderer;
 
 import com.mrbysco.camocreepers.Constants;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.entity.CreeperRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -27,8 +28,10 @@ public class CamoCreeperRenderer extends CreeperRenderer {
 		if (renderState instanceof CamoCreeperRenderState camoRenderState) {
 			camoRenderState.feetState = creeper.getBlockStateOn();
 			camoRenderState.biome = creeper.level().getBiome(creeper.blockPosition());
-			camoRenderState.baseColor = BiomeColors.getAverageGrassColor(creeper.level(), creeper.blockPosition());
-			camoRenderState.foliageColor = BiomeColors.getAverageFoliageColor(creeper.level(), creeper.blockPosition());
+			if (creeper.level().isClientSide() && creeper.level() instanceof ClientLevel clientLevel) {
+				camoRenderState.baseColor = BiomeColors.getAverageGrassColor(clientLevel, creeper.blockPosition());
+				camoRenderState.foliageColor = BiomeColors.getAverageFoliageColor(clientLevel, creeper.blockPosition());
+			}
 			camoRenderState.seaLevel = creeper.level().getSeaLevel();
 			camoRenderState.canSeeSky = creeper.level().canSeeSky(creeper.blockPosition());
 		}

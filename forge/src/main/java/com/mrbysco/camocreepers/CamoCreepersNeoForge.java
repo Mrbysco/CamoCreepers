@@ -25,7 +25,6 @@ public class CamoCreepersNeoForge {
 
 	public CamoCreepersNeoForge(IEventBus eventBus, ModContainer container, Dist dist) {
 		container.registerConfig(ModConfig.Type.COMMON, CamoConfig.commonSpec);
-		eventBus.register(CamoConfig.class);
 
 		CommonClass.init();
 

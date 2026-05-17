@@ -2,6 +2,7 @@ package com.mrbysco.camocreepers.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.camocreepers.Constants;
+import com.mrbysco.camocreepers.config.CamoConfig;
 import com.mrbysco.camocreepers.platform.Services;
 import net.minecraft.client.model.monster.creeper.CreeperModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -41,18 +42,18 @@ public class CamoColorLayer extends RenderLayer<CreeperRenderState, CreeperModel
 			final Optional<ResourceKey<Biome>> optionalBiomeResourceKey = biome.unwrapKey();
 			int baseColor = camoRenderState.baseColor;
 			int color;
-			if (optionalBiomeResourceKey.isPresent() && Services.PLATFORM.showNetherCamo() && biome.is(BiomeTags.IS_NETHER)) {
+			if (optionalBiomeResourceKey.isPresent() && CamoConfig.COMMON.netherCamo.get() && biome.is(BiomeTags.IS_NETHER)) {
 				final Identifier location = optionalBiomeResourceKey.get().identifier();
 				if (location != null && location.equals(Biomes.BASALT_DELTAS.identifier())) {
 					color = 6052956;
 				} else {
 					color = 8733250;
 				}
-			} else if (Services.PLATFORM.showEndCamo() && biome.is(BiomeTags.IS_END)) {
+			} else if (CamoConfig.COMMON.endCamo.get() && biome.is(BiomeTags.IS_END)) {
 				color = 15660724;
 			} else if (biome.is(Constants.IS_MUSHROOM)) {
 				color = 9138547;
-			} else if (Services.PLATFORM.showCaveCamo() && camoRenderState.y < camoRenderState.seaLevel && !camoRenderState.canSeeSky) {
+			} else if (CamoConfig.COMMON.caveCamo.get() && camoRenderState.y < camoRenderState.seaLevel && !camoRenderState.canSeeSky) {
 				color = 7631988;
 			} else if (biome.is(Constants.IS_SANDY) || biome.is(BiomeTags.IS_BEACH)) {
 				color = 14009494;

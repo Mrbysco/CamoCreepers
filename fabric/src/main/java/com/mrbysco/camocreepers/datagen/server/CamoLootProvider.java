@@ -1,29 +1,26 @@
 package com.mrbysco.camocreepers.datagen.server;
 
 import com.mrbysco.camocreepers.registration.CamoRegistry;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricEntityLootSubProvider;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiConsumer;
 
-public class CamoLootProvider extends SimpleFabricLootTableProvider {
+public class CamoLootProvider extends FabricEntityLootSubProvider {
 
-	public CamoLootProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
-		super(output, registryLookup, LootContextParamSets.ENTITY);
+	public CamoLootProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
+		super(output, registryLookup);
 	}
 
 	@Override
-	public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
-		biConsumer.accept(CamoRegistry.CAMO_CREEPER.get().getDefaultLootTable().get(), LootTable.lootTable()
+	public void generate() {
+		add(CamoRegistry.CAMO_CREEPER.get(), LootTable.lootTable()
 				.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
 						.add(NestedLootTable.lootTableReference(EntityType.CREEPER.getDefaultLootTable().get()))));
 	}

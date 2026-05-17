@@ -2,7 +2,7 @@ package com.mrbysco.camocreepers.datagen.client;
 
 import com.mrbysco.camocreepers.registration.CamoRegistry;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.model.ItemModelUtils;
@@ -10,7 +10,7 @@ import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.world.item.Items;
 
 public class CamoModelProvider extends FabricModelProvider {
-	public CamoModelProvider(FabricDataOutput packOutput) {
+	public CamoModelProvider(FabricPackOutput packOutput) {
 		super(packOutput);
 	}
 

@@ -3,32 +3,29 @@ package com.mrbysco.camocreepers;
 import com.mrbysco.camocreepers.config.CamoConfig;
 import com.mrbysco.camocreepers.entity.CamoCreeper;
 import com.mrbysco.camocreepers.registration.CamoRegistry;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigHolder;
-import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
+import fuzs.forgeconfigapiport.fabric.api.v5.ConfigRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.neoforged.fml.config.ModConfig;
 
 import java.util.function.Predicate;
 
 public class CamoCreepersFabric implements ModInitializer {
-	public static ConfigHolder<CamoConfig> config;
 
 	@Override
 	public void onInitialize() {
-		config = AutoConfig.register(CamoConfig.class, JanksonConfigSerializer::new);
+		ConfigRegistry.INSTANCE.register(Constants.MOD_ID, ModConfig.Type.COMMON, CamoConfig.commonSpec);
 
 		CommonClass.init();
 
@@ -37,7 +34,7 @@ public class CamoCreepersFabric implements ModInitializer {
 
 		modifyBiomeSpawns();
 
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.SPAWN_EGGS).register(entries ->
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.SPAWN_EGGS).register(entries ->
 				entries.accept(CamoRegistry.CAMO_CREEPER_SPAWN_EGG.get())
 		);
 	}
@@ -54,10 +51,10 @@ public class CamoCreepersFabric implements ModInitializer {
 	private void modifyBiomeSpawns() {
 		BiomeModifications.addSpawn(getContext(EntityType.CREEPER), MobCategory.MONSTER, CamoRegistry.CAMO_CREEPER.get(), 100, 4, 4);
 
-		if (config.get().general.overrideCreeperSpawns) {
+		if (CamoConfig.COMMON.overrideCreeperSpawns.get()) {
 			BiomeModifications.create(Constants.modLoc("remove_creepers"))
 					.add(ModificationPhase.REMOVALS, getContext(EntityType.CREEPER), context -> {
-						context.getSpawnSettings().removeSpawnsOfEntityType(EntityType.CREEPER);
+						context.getMobSpawnSettings().removeSpawnsOfEntityType(EntityType.CREEPER);
 					});
 		}
 	}

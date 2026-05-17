@@ -1,13 +1,14 @@
 package com.mrbysco.camocreepers.config;
 
+import com.mrbysco.camocreepers.Constants;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.AutoConfigClient;
+import net.minecraft.client.gui.screens.Screen;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 
 public class CamoMenuIntegration implements ModMenuApi {
 	@Override
 	public ConfigScreenFactory<?> getModConfigScreenFactory() {
-		return parent -> AutoConfigClient.getConfigScreen(CamoConfig.class, parent).get();
+		return (Screen screen) -> new ConfigurationScreen(Constants.MOD_ID, screen);
 	}
 }
