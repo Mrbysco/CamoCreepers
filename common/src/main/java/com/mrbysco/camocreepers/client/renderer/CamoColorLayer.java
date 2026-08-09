@@ -3,7 +3,6 @@ package com.mrbysco.camocreepers.client.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.camocreepers.Constants;
 import com.mrbysco.camocreepers.config.CamoConfig;
-import com.mrbysco.camocreepers.platform.Services;
 import net.minecraft.client.model.monster.creeper.CreeperModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
