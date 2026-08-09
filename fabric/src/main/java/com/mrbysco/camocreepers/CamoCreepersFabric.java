@@ -53,9 +53,8 @@ public class CamoCreepersFabric implements ModInitializer {
 
 		if (CamoConfig.COMMON.overrideCreeperSpawns.get()) {
 			BiomeModifications.create(Constants.modLoc("remove_creepers"))
-					.add(ModificationPhase.REMOVALS, getContext(EntityType.CREEPER), context -> {
-						context.getMobSpawnSettings().removeSpawnsOfEntityType(EntityType.CREEPER);
-					});
+					.add(ModificationPhase.REMOVALS, getContext(EntityType.CREEPER), context ->
+							context.getMobSpawnSettings().removeSpawnsOfEntityType(EntityType.CREEPER));
 		}
 	}
 
