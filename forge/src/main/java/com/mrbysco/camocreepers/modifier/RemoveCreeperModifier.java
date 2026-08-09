@@ -7,7 +7,7 @@ import com.mrbysco.camocreepers.config.CamoConfig;
 import com.mrbysco.camocreepers.registry.CamoModifiers;
 import net.minecraft.core.Holder;
 import net.minecraft.util.random.WeightedList;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData;
@@ -25,7 +25,7 @@ public class RemoveCreeperModifier implements BiomeModifier {
 			MobSpawnSettingsBuilder spawnBuilder = builder.getMobSpawnSettings();
 			for (MobCategory category : MobCategory.values()) {
 				final WeightedList.Builder<SpawnerData> spawns = spawnBuilder.getSpawner(category);
-				spawns.removeIf(spawnerData -> spawnerData.value().type() == EntityType.CREEPER);
+				spawns.removeIf(spawnerData -> spawnerData.value().type() == EntityTypes.CREEPER);
 			}
 		}
 	}

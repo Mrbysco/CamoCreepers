@@ -15,12 +15,12 @@ Creepers that blend in more with the environment
 [[dependencies.camocreepers]]
 modId="minecraft"
 type="required"
-versionRange="[26.1.1,)"
+versionRange="[26.2,)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.camocreepers]]
 modId="neoforge"
 type="required"
-versionRange="[26.1.1.0-beta,)"
+versionRange="[26.2.0.43-beta,)"
 ordering="NONE"
 side="BOTH"

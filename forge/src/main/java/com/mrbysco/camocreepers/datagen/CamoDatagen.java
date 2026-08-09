@@ -18,7 +18,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
@@ -57,7 +57,7 @@ public class CamoDatagen {
 		// We need the BIOME registry to be present so we can use a biome tag, doesn't matter that it's empty
 		registryBuilder.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, context -> {
 			context.register(ADD_CAMO_CREEPER, new AddEntityToSameBiomesModifier(
-					EntityType.CREEPER, CamoRegistry.CAMO_CREEPER.get(), 100, 4, 4));
+					EntityTypes.CREEPER, CamoRegistry.CAMO_CREEPER.get(), 100, 4, 4));
 			context.register(REMOVE_CREEPER, new RemoveCreeperModifier());
 		});
 		registryBuilder.add(Registries.BIOME, context -> {

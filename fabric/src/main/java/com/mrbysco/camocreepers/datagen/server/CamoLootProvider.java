@@ -4,7 +4,7 @@ import com.mrbysco.camocreepers.registration.CamoRegistry;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricEntityLootSubProvider;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
@@ -22,6 +22,6 @@ public class CamoLootProvider extends FabricEntityLootSubProvider {
 	public void generate() {
 		add(CamoRegistry.CAMO_CREEPER.get(), LootTable.lootTable()
 				.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-						.add(NestedLootTable.lootTableReference(EntityType.CREEPER.getDefaultLootTable().get()))));
+						.add(NestedLootTable.lootTableReference(EntityTypes.CREEPER.getDefaultLootTable().get()))));
 	}
 }

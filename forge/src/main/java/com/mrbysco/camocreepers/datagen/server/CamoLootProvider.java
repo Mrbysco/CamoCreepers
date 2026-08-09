@@ -9,6 +9,7 @@ import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -38,7 +39,7 @@ public class CamoLootProvider extends LootTableProvider {
 		public void generate() {
 			this.add(CamoRegistry.CAMO_CREEPER.get(), LootTable.lootTable()
 					.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-							.add(NestedLootTable.lootTableReference(EntityType.CREEPER.getDefaultLootTable().get()))));
+							.add(NestedLootTable.lootTableReference(EntityTypes.CREEPER.getDefaultLootTable().get()))));
 		}
 
 		@Override

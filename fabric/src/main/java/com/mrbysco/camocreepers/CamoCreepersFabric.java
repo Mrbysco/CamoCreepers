@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -49,12 +50,12 @@ public class CamoCreepersFabric implements ModInitializer {
 	}
 
 	private void modifyBiomeSpawns() {
-		BiomeModifications.addSpawn(getContext(EntityType.CREEPER), MobCategory.MONSTER, CamoRegistry.CAMO_CREEPER.get(), 100, 4, 4);
+		BiomeModifications.addSpawn(getContext(EntityTypes.CREEPER), MobCategory.MONSTER, CamoRegistry.CAMO_CREEPER.get(), 100, 4, 4);
 
 		if (CamoConfig.COMMON.overrideCreeperSpawns.get()) {
 			BiomeModifications.create(Constants.modLoc("remove_creepers"))
-					.add(ModificationPhase.REMOVALS, getContext(EntityType.CREEPER), context ->
-							context.getMobSpawnSettings().removeSpawnsOfEntityType(EntityType.CREEPER));
+					.add(ModificationPhase.REMOVALS, getContext(EntityTypes.CREEPER), context ->
+							context.getMobSpawnSettings().removeSpawnsOfEntityType(EntityTypes.CREEPER));
 		}
 	}
 
